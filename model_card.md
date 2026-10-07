@@ -17,6 +17,23 @@ cannot be answered within the chosen risk level. It never generates text.
 every function holder but no machine interpretation. Norway (whose register ships an official
 interpreter) is the main source of training labels; Denmark is a zero-shot test.
 
+## How to use
+
+```bash
+git clone https://github.com/aliildan/signrule-decide && cd signrule-decide && uv sync
+hf download aildan/signrule-decide-4b --local-dir runs/signrule-decide-4b
+uv run python server/app.py --run runs/signrule-decide-4b \
+  --policy NO=runs/signrule-decide-4b/calibration/NO.json \
+  --policy AT=runs/signrule-decide-4b/calibration/AT.json      # /v1/systemone on :8300
+```
+
+The base model `Qwen/Qwen3.5-4B-Base` is downloaded on first start. Files: `adapter_model.safetensors`
+(LoRA), `head.pt` (pointer head, PyTorch state), `calibration/NO.json` and `calibration/AT.json`
+(temperatures and abstention thresholds fitted on each register's validation part), tokenizer and
+training configuration. Request format and examples: the GitHub README and `results/demo/demo-de.md`.
+The model cannot run in Ollama or llama.cpp: it does not generate text, its pointer head scores the
+answer options.
+
 ## Model details
 
 | | |

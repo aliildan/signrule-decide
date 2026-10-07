@@ -3,8 +3,7 @@
 **Who can sign for this company? Typed, calibrated answers from Austrian register extracts —
 locally, without sending data anywhere.**
 
-[Licence: Apache-2.0](LICENSE) · Python 3.12 · 4B parameters · one GPU · open weights (Hugging Face link
-on release)
+[Licence: Apache-2.0](LICENSE) · Python 3.12 · 4B parameters · one GPU · [open weights](https://huggingface.co/aildan/signrule-decide-4b)
 
 ---
 
@@ -108,11 +107,15 @@ ceiling):
 ## Quick start
 
 ```bash
-git clone https://github.com/aliildan/signrule-decide && cd signrule-decide
-uv sync
-# download the weights from Hugging Face into runs/noat-4b-v2 (link on release), then:
-make serve RUN=runs/noat-4b-v2           # /v1/systemone on localhost:8300
+git clone https://github.com/aliildan/signrule-decide && cd signrule-decide && uv sync
+hf download aildan/signrule-decide-4b --local-dir runs/signrule-decide-4b
+uv run python server/app.py --run runs/signrule-decide-4b \
+  --policy NO=runs/signrule-decide-4b/calibration/NO.json \
+  --policy AT=runs/signrule-decide-4b/calibration/AT.json      # /v1/systemone on localhost:8300
 ```
+
+Weights: [huggingface.co/aildan/signrule-decide-4b](https://huggingface.co/aildan/signrule-decide-4b).
+The model does not generate text, so it cannot run in Ollama or llama.cpp; use this server.
 
 Ask questions with the canonical wordings from `configs/questions.yaml`:
 
