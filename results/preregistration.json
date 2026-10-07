@@ -1,0 +1,28 @@
+{
+ "note": "Pre-registered hypotheses and their outcomes, transcribed from the dated pre-registration log (written before each result was read). 'Reference set' results are agreement with the consensus of two AI assistants, human spot-checked. H11-H18 on Austria were measured with the 384-token benchmark setting; H21-H22 under the serving context. H19-H20 were planned for a paused plan and never registered.",
+ "hypotheses": [
+  {"id": "H1", "plan": "v0 (Norway)", "statement": "The best decision LLM beats the best fine-tuned encoder on the Norwegian test (paired CI lower bound > 0)", "outcome": "not met", "evidence": "9B - mmBERT-base +0.30 pp, CI95 [-0.06, +0.70]"},
+  {"id": "H2", "plan": "v0 (Norway)", "statement": "After temperature scaling on validation, test ECE <= 0.05 (yes/no, choice)", "outcome": "met", "evidence": "ECE 0.002 / 0.007"},
+  {"id": "H3", "plan": "v0 (Norway)", "statement": "Learn-then-Test: yes/no coverage >= 50 % at alpha 2 % with test risk <= alpha", "outcome": "met", "evidence": "coverage 100 %, risk 0.6 %"},
+  {"id": "H4", "plan": "v0 (Norway)", "statement": "Temporal test within 3 pp of the random test on four main questions", "outcome": "met (weak)", "evidence": "73-87 temporal items"},
+  {"id": "H5", "plan": "Austria pilot", "statement": "Norway-only model, zero-shot on court-coded Austrian companies: CEO alone and procuration present >= 90 %", "outcome": "met", "evidence": "90.4 % / 100 %"},
+  {"id": "H6", "plan": "Austria pilot", "statement": "Beats TF-IDF and the encoder on Austrian CEO alone by >= 10 pp", "outcome": "partly", "evidence": "+84 pp vs TF-IDF; encoder not run then"},
+  {"id": "H7", "plan": "Austria pilot", "statement": "Norwegian thresholds keep risk <= 5 % on Austria at alpha 2 %", "outcome": "met (boundary)", "evidence": "5.0 %"},
+  {"id": "H8-H10", "plan": "runs A/B/C", "statement": "Norway + Austria training (codes only) vs Norway only", "outcome": "superseded", "evidence": "replaced by A'/B'/C' (coalition questions) before any training"},
+  {"id": "H11", "plan": "coalitions (C')", "statement": "Austrian reference set: coalitions >= 95 %, derived min signers >= 90 %, derived rule type >= 85 %", "outcome": "not met", "evidence": "99.4 % / 78.3 % / 84.8 % (direct heads 96.8 % / 96.7 %, secondary)"},
+  {"id": "H12", "plan": "coalitions (C')", "statement": "At alpha 2 %: >= 70 % of Austrian coalition items answered with risk <= 5 %", "outcome": "met", "evidence": "coverage 100 %, risk 0.6 %"},
+  {"id": "H13", "plan": "coalitions (C')", "statement": "Norway + Austria beats Norway only by >= 10 pp on Austrian coalitions; Norway unchanged", "outcome": "met", "evidence": "+17.7 pp; worst Norwegian change 0.00 pp"},
+  {"id": "H14", "plan": "coalitions (C')", "statement": "Beats the phrase table on (coalitions + derived min signers) / 2", "outcome": "not met", "evidence": "88.9 % vs 90.6 % (direct head 98.1 %, secondary)"},
+  {"id": "H15", "plan": "release model (C'')", "statement": "Norwegian reference set rule type >= 75 %, and no question drops > 1 pp vs C'", "outcome": "not met", "evidence": "93.0 % (C' 62.3 %); Austrian ambiguity -12.6 pp, one two-board-members item -3.6 pp"},
+  {"id": "H16", "plan": "release model (C'')", "statement": "Austrian reference set: derived min signers >= 90 %, derived rule type >= 85 %, coalitions >= 95 %", "outcome": "not met", "evidence": "77.7 % / 88.0 % / 99.2 %"},
+  {"id": "H17", "plan": "Denmark zero-shot", "statement": "Danish reference set, never trained on: coalitions >= 90 %, min signers >= 85 %", "outcome": "met", "evidence": "92.5 % / 86.4 %"},
+  {"id": "H18", "plan": "Denmark zero-shot", "statement": "Strictest merged policy keeps risk <= 5 % at alpha 5 % on Denmark", "outcome": "not met", "evidence": "risk 14.3 %"},
+  {"id": "H21", "plan": "Austria batch 2", "statement": "Boards and partnerships: coalitions >= 95 %, min signers >= 90 %, dangerous yes/no errors <= 1 %", "outcome": "met", "evidence": "99.4 % / 98.5 % / 0.55 %"},
+  {"id": "H22", "plan": "Austria batch 2", "statement": "Risk <= 2 % at alpha 2 % on answered structural questions", "outcome": "met", "evidence": "1.3 % at 99.9 % coverage"}
+ ],
+ "deviations": [
+  "The release model (C'') was chosen by the project owner although H15 failed (decision rule: keep C').",
+  "Training execution mode changed between C' and C'' (shared-prefix forward; same computation).",
+  "Benchmarks moved to the serving context after the 384-token setting was found to skip long Austrian states."
+ ]
+}

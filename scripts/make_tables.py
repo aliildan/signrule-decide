@@ -239,6 +239,14 @@ def data() -> str:
     )
 
 
+def prereg() -> str:
+    d = json.loads((RESULTS / "preregistration.json").read_text())
+    rows = [
+        [h["id"], h["statement"], f"**{h['outcome']}**", h["evidence"]] for h in d["hypotheses"]
+    ]
+    return table(["", "Pre-registered hypothesis", "Outcome", "Evidence"], rows)
+
+
 def compute() -> str:
     c = json.loads((RESULTS / "compute.json").read_text())
     hw, tr, sv = c["hardware"], c["training"], c["serving"]
@@ -264,14 +272,18 @@ def _tex(cell: str) -> str:
     return cell.replace('"', "''")
 
 
-def to_latex(md: str) -> str:
+PREREG_SPEC = "@{}lp{6.2cm}lp{4.6cm}@{}"
+
+
+def to_latex(md: str, spec: str | None = None) -> str:
     """A generated markdown table (plus trailing note) as a booktabs tabular."""
     lines = md.strip().split("\n")
     rows = [line for line in lines if line.startswith("|")]
     rest = [line for line in lines if not line.startswith("|") and line.strip()]
     cells = [[c for c in r.strip("|").split("|")] for r in rows if not set(r) <= set("|-")]
     head, body = cells[0], cells[1:]
-    out = [f"\\begin{{tabular}}{{l{'r' * (len(head) - 1)}}}", "\\toprule"]
+    spec = spec or f"l{'r' * (len(head) - 1)}"
+    out = [f"\\begin{{tabular}}{{{spec}}}", "\\toprule"]
     out.append(" & ".join(_tex(c) for c in head) + " \\\\")
     out.append("\\midrule")
     out += [" & ".join(_tex(c) for c in r) + " \\\\" for r in body]
@@ -288,6 +300,7 @@ TABLES = {
     "in-distribution": in_distribution,
     "compute": compute,
     "data": data,
+    "prereg": prereg,
 }
 BLOCK = re.compile(r"(<!-- table:([\w-]+) -->\n)(.*?)(<!-- /table -->)", re.S)
 
@@ -319,7 +332,10 @@ def main(argv: list[str] | None = None) -> int:
             if not a.check:
                 path.write_text(new, encoding="utf-8")
     release = "\n\n".join(f"## {name}\n\n{t}" for name, t in tables.items()) + "\n"
-    latex = {name: to_latex(t) + "\n" for name, t in tables.items()}
+    latex = {
+        name: to_latex(t, PREREG_SPEC if name == "prereg" else None) + "\n"
+        for name, t in tables.items()
+    }
     out = RESULTS / "tables" / "release.md"
     if a.check:
         if stale or not out.exists() or out.read_text(encoding="utf-8") != release:

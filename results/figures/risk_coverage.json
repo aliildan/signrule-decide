@@ -1,0 +1,263 @@
+{
+ "at-c2": {
+  "label": "Austria, SignRule-Decide 4B",
+  "questions": 3949,
+  "aurc": 0.00517,
+  "points": [
+   {
+    "coverage": 0.0499,
+    "risk_percent": 0.508
+   },
+   {
+    "coverage": 0.1,
+    "risk_percent": 0.253
+   },
+   {
+    "coverage": 0.1499,
+    "risk_percent": 0.169
+   },
+   {
+    "coverage": 0.2001,
+    "risk_percent": 0.127
+   },
+   {
+    "coverage": 0.2499,
+    "risk_percent": 0.101
+   },
+   {
+    "coverage": 0.3001,
+    "risk_percent": 0.169
+   },
+   {
+    "coverage": 0.35,
+    "risk_percent": 0.362
+   },
+   {
+    "coverage": 0.4001,
+    "risk_percent": 0.506
+   },
+   {
+    "coverage": 0.45,
+    "risk_percent": 0.732
+   },
+   {
+    "coverage": 0.4999,
+    "risk_percent": 0.76
+   },
+   {
+    "coverage": 0.55,
+    "risk_percent": 0.783
+   },
+   {
+    "coverage": 0.5999,
+    "risk_percent": 0.718
+   },
+   {
+    "coverage": 0.65,
+    "risk_percent": 0.662
+   },
+   {
+    "coverage": 0.6999,
+    "risk_percent": 0.615
+   },
+   {
+    "coverage": 0.7501,
+    "risk_percent": 0.608
+   },
+   {
+    "coverage": 0.7999,
+    "risk_percent": 0.57
+   },
+   {
+    "coverage": 0.8501,
+    "risk_percent": 0.596
+   },
+   {
+    "coverage": 0.9,
+    "risk_percent": 0.619
+   },
+   {
+    "coverage": 0.9501,
+    "risk_percent": 0.906
+   },
+   {
+    "coverage": 1.0,
+    "risk_percent": 1.367
+   }
+  ]
+ },
+ "at-mmbert": {
+  "label": "Austria, mmBERT-base",
+  "questions": 3949,
+  "aurc": 0.0075,
+  "points": [
+   {
+    "coverage": 0.0499,
+    "risk_percent": 0.0
+   },
+   {
+    "coverage": 0.1,
+    "risk_percent": 0.506
+   },
+   {
+    "coverage": 0.1499,
+    "risk_percent": 0.845
+   },
+   {
+    "coverage": 0.2001,
+    "risk_percent": 0.759
+   },
+   {
+    "coverage": 0.2499,
+    "risk_percent": 0.811
+   },
+   {
+    "coverage": 0.3001,
+    "risk_percent": 0.675
+   },
+   {
+    "coverage": 0.35,
+    "risk_percent": 0.796
+   },
+   {
+    "coverage": 0.4001,
+    "risk_percent": 0.823
+   },
+   {
+    "coverage": 0.45,
+    "risk_percent": 0.732
+   },
+   {
+    "coverage": 0.4999,
+    "risk_percent": 0.659
+   },
+   {
+    "coverage": 0.55,
+    "risk_percent": 0.737
+   },
+   {
+    "coverage": 0.5999,
+    "risk_percent": 0.718
+   },
+   {
+    "coverage": 0.65,
+    "risk_percent": 0.74
+   },
+   {
+    "coverage": 0.6999,
+    "risk_percent": 0.76
+   },
+   {
+    "coverage": 0.7501,
+    "risk_percent": 0.777
+   },
+   {
+    "coverage": 0.7999,
+    "risk_percent": 0.823
+   },
+   {
+    "coverage": 0.8501,
+    "risk_percent": 0.894
+   },
+   {
+    "coverage": 0.9,
+    "risk_percent": 0.957
+   },
+   {
+    "coverage": 0.9501,
+    "risk_percent": 1.039
+   },
+   {
+    "coverage": 1.0,
+    "risk_percent": 1.747
+   }
+  ]
+ },
+ "dk-c2": {
+  "label": "Denmark (zero-shot), SignRule-Decide 4B",
+  "questions": 3348,
+  "aurc": 0.02458,
+  "points": [
+   {
+    "coverage": 0.0499,
+    "risk_percent": 0.0
+   },
+   {
+    "coverage": 0.1001,
+    "risk_percent": 0.0
+   },
+   {
+    "coverage": 0.1499,
+    "risk_percent": 0.0
+   },
+   {
+    "coverage": 0.2001,
+    "risk_percent": 0.0
+   },
+   {
+    "coverage": 0.25,
+    "risk_percent": 0.119
+   },
+   {
+    "coverage": 0.2999,
+    "risk_percent": 0.1
+   },
+   {
+    "coverage": 0.3501,
+    "risk_percent": 0.768
+   },
+   {
+    "coverage": 0.3999,
+    "risk_percent": 1.12
+   },
+   {
+    "coverage": 0.4501,
+    "risk_percent": 1.393
+   },
+   {
+    "coverage": 0.5,
+    "risk_percent": 1.673
+   },
+   {
+    "coverage": 0.5499,
+    "risk_percent": 2.444
+   },
+   {
+    "coverage": 0.6001,
+    "risk_percent": 2.837
+   },
+   {
+    "coverage": 0.6499,
+    "risk_percent": 3.125
+   },
+   {
+    "coverage": 0.7001,
+    "risk_percent": 3.754
+   },
+   {
+    "coverage": 0.75,
+    "risk_percent": 4.102
+   },
+   {
+    "coverage": 0.7999,
+    "risk_percent": 4.294
+   },
+   {
+    "coverage": 0.8501,
+    "risk_percent": 5.341
+   },
+   {
+    "coverage": 0.8999,
+    "risk_percent": 6.273
+   },
+   {
+    "coverage": 0.9501,
+    "risk_percent": 7.199
+   },
+   {
+    "coverage": 1.0,
+    "risk_percent": 9.409
+   }
+  ]
+ }
+}
