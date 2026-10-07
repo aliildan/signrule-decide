@@ -36,4 +36,7 @@ preferred-citation:
     - family-names: Ildan
       given-names: Ali
   year: 2026
-  url: "https://github.com/aliildan/signrule-decide"
+  doi: 10.5281/zenodo.23224942
+  publisher:
+    name: Zenodo
+  url: "https://doi.org/10.5281/zenodo.23224942"

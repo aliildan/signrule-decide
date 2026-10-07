@@ -3,7 +3,7 @@
 **Who can sign for this company? Typed, calibrated answers from Austrian register extracts —
 locally, without sending data anywhere.**
 
-[Licence: Apache-2.0](LICENSE) · Python 3.12 · 4B parameters · one GPU · [open weights](https://huggingface.co/aildan/signrule-decide-4b) · [DOI 10.5281/zenodo.23224891](https://doi.org/10.5281/zenodo.23224891)
+[Licence: Apache-2.0](LICENSE) · Python 3.12 · 4B parameters · one GPU · [open weights](https://huggingface.co/aildan/signrule-decide-4b) · [paper](https://doi.org/10.5281/zenodo.23224942) · [DOI 10.5281/zenodo.23224891](https://doi.org/10.5281/zenodo.23224891)
 
 ---
 
@@ -229,6 +229,22 @@ RTX 5090), `kev_wrapper bench`, and `eval/run_all.py`. The reference sets contai
 are not published; their agreement statistics are in `results/gold/`.
 
 ## Citation
+
+The paper:
+
+```bibtex
+@misc{ildan2026whomaysign,
+  author    = {Ildan, Ali},
+  title     = {Who May Sign? Typed, Calibrated Decisions on Company Representation Rules in the Austrian Commercial Register},
+  year      = {2026},
+  publisher = {Zenodo},
+  note      = {Preprint},
+  doi       = {10.5281/zenodo.23224942},
+  url       = {https://doi.org/10.5281/zenodo.23224942}
+}
+```
+
+The code and model:
 
 ```bibtex
 @software{ildan2026signrule,

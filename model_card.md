@@ -180,6 +180,22 @@ training data or gold annotations are distributed.
 
 ## Citation
 
+The paper:
+
+```bibtex
+@misc{ildan2026whomaysign,
+  author    = {Ildan, Ali},
+  title     = {Who May Sign? Typed, Calibrated Decisions on Company Representation Rules in the Austrian Commercial Register},
+  year      = {2026},
+  publisher = {Zenodo},
+  note      = {Preprint},
+  doi       = {10.5281/zenodo.23224942},
+  url       = {https://doi.org/10.5281/zenodo.23224942}
+}
+```
+
+The code and model:
+
 ```bibtex
 @software{ildan2026signrule,
   author    = {Ildan, Ali},
