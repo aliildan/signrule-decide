@@ -3,22 +3,22 @@
  & Pre-registered hypothesis & Outcome & Evidence \\
 \midrule
 H1 & The best decision LLM beats the best fine-tuned encoder on the Norwegian test (paired CI lower bound > 0) & \textbf{not met} & 9B - mmBERT-base +0.30 pp, CI95 [-0.06, +0.70] \\
-H2 & After temperature scaling on validation, test ECE <= 0.05 (yes/no, choice) & \textbf{met} & ECE 0.002 / 0.007 \\
-H3 & Learn-then-Test: yes/no coverage >= 50\,\% at alpha 2\,\% with test risk <= alpha & \textbf{met} & coverage 100\,\%, risk 0.6\,\% \\
+H2 & After temperature scaling on validation, test ECE $\le$ 0.05 (yes/no, choice) & \textbf{met} & ECE 0.002 / 0.007 \\
+H3 & Learn-then-Test: yes/no coverage $\ge$ 50\,\% at alpha 2\,\% with test risk $\le$ alpha & \textbf{met} & coverage 100\,\%, risk 0.6\,\% \\
 H4 & Temporal test within 3 pp of the random test on four main questions & \textbf{met (weak)} & 73-87 temporal items \\
-H5 & Norway-only model, zero-shot on court-coded Austrian companies: CEO alone and procuration present >= 90\,\% & \textbf{met} & 90.4\,\% / 100\,\% \\
-H6 & Beats TF-IDF and the encoder on Austrian CEO alone by >= 10 pp & \textbf{partly} & +84 pp vs TF-IDF; encoder not run then \\
-H7 & Norwegian thresholds keep risk <= 5\,\% on Austria at alpha 2\,\% & \textbf{met (boundary)} & 5.0\,\% \\
+H5 & Norway-only model, zero-shot on court-coded Austrian companies: CEO alone and procuration present $\ge$ 90\,\% & \textbf{met} & 90.4\,\% / 100\,\% \\
+H6 & Beats TF-IDF and the encoder on Austrian CEO alone by $\ge$ 10 pp & \textbf{partly} & +84 pp vs TF-IDF; encoder not run then \\
+H7 & Norwegian thresholds keep risk $\le$ 5\,\% on Austria at alpha 2\,\% & \textbf{met (boundary)} & 5.0\,\% \\
 H8-H10 & Norway + Austria training (codes only) vs Norway only & \textbf{superseded} & replaced by A'/B'/C' (coalition questions) before any training \\
-H11 & Austrian reference set: coalitions >= 95\,\%, derived min signers >= 90\,\%, derived rule type >= 85\,\% & \textbf{not met} & 99.4\,\% / 78.3\,\% / 84.8\,\% (direct heads 96.8\,\% / 96.7\,\%, secondary) \\
-H12 & At alpha 2\,\%: >= 70\,\% of Austrian coalition items answered with risk <= 5\,\% & \textbf{met} & coverage 100\,\%, risk 0.6\,\% \\
-H13 & Norway + Austria beats Norway only by >= 10 pp on Austrian coalitions; Norway unchanged & \textbf{met} & +17.7 pp; worst Norwegian change 0.00 pp \\
+H11 & Austrian reference set: coalitions $\ge$ 95\,\%, derived min signers $\ge$ 90\,\%, derived rule type $\ge$ 85\,\% & \textbf{not met} & 99.4\,\% / 78.3\,\% / 84.8\,\% (direct heads 96.8\,\% / 96.7\,\%, secondary) \\
+H12 & At alpha 2\,\%: $\ge$ 70\,\% of Austrian coalition items answered with risk $\le$ 5\,\% & \textbf{met} & coverage 100\,\%, risk 0.6\,\% \\
+H13 & Norway + Austria beats Norway only by $\ge$ 10 pp on Austrian coalitions; Norway unchanged & \textbf{met} & +17.7 pp; worst Norwegian change 0.00 pp \\
 H14 & Beats the phrase table on (coalitions + derived min signers) / 2 & \textbf{not met} & 88.9\,\% vs 90.6\,\% (direct head 98.1\,\%, secondary) \\
-H15 & Norwegian reference set rule type >= 75\,\%, and no question drops > 1 pp vs C' & \textbf{not met} & 93.0\,\% (C' 62.3\,\%); Austrian ambiguity -12.6 pp, one two-board-members item -3.6 pp \\
-H16 & Austrian reference set: derived min signers >= 90\,\%, derived rule type >= 85\,\%, coalitions >= 95\,\% & \textbf{not met} & 77.7\,\% / 88.0\,\% / 99.2\,\% \\
-H17 & Danish reference set, never trained on: coalitions >= 90\,\%, min signers >= 85\,\% & \textbf{met} & 92.5\,\% / 86.4\,\% \\
-H18 & Strictest merged policy keeps risk <= 5\,\% at alpha 5\,\% on Denmark & \textbf{not met} & risk 14.3\,\% \\
-H21 & Boards and partnerships: coalitions >= 95\,\%, min signers >= 90\,\%, dangerous yes/no errors <= 1\,\% & \textbf{met} & 99.4\,\% / 98.5\,\% / 0.55\,\% \\
-H22 & Risk <= 2\,\% at alpha 2\,\% on answered structural questions & \textbf{met} & 1.3\,\% at 99.9\,\% coverage \\
+H15 & Norwegian reference set rule type $\ge$ 75\,\%, and no question drops > 1 pp vs C' & \textbf{not met} & 93.0\,\% (C' 62.3\,\%); Austrian ambiguity -12.6 pp, one two-board-members item -3.6 pp \\
+H16 & Austrian reference set: derived min signers $\ge$ 90\,\%, derived rule type $\ge$ 85\,\%, coalitions $\ge$ 95\,\% & \textbf{not met} & 77.7\,\% / 88.0\,\% / 99.2\,\% \\
+H17 & Danish reference set, never trained on: coalitions $\ge$ 90\,\%, min signers $\ge$ 85\,\% & \textbf{met} & 92.5\,\% / 86.4\,\% \\
+H18 & Strictest merged policy keeps risk $\le$ 5\,\% at alpha 5\,\% on Denmark & \textbf{not met} & risk 14.3\,\% \\
+H21 & Boards and partnerships: coalitions $\ge$ 95\,\%, min signers $\ge$ 90\,\%, dangerous yes/no errors $\le$ 1\,\% & \textbf{met} & 99.4\,\% / 98.5\,\% / 0.55\,\% \\
+H22 & Risk $\le$ 2\,\% at alpha 2\,\% on answered structural questions & \textbf{met} & 1.3\,\% at 99.9\,\% coverage \\
 \bottomrule
 \end{tabular}

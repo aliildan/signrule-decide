@@ -20,9 +20,9 @@ SignRule-Decide 4B on the same items: dangerous yes/no errors ("can sign" when t
 
 ## other-registers
 
-| Reference set | CEO alone | Coalitions | Min. signers | Rule type | Register in training? |
+| Reference set | CEO alone | Coalitions | Min. signers | Rule type | In training? |
 |---|---|---|---|---|---|
-| Norway, texts the official interpreter could not read (250) | 100.0 % | 99.0 % | 98.0 % | 93.0 % | trained |
+| Norway (250, beyond the interpreter) | 100.0 % | 99.0 % | 98.0 % | 93.0 % | trained |
 | Denmark (300) | 89.2 % | 92.5 % | 86.4 % | 62.4 % | **never seen** |
 
 ## in-distribution
@@ -44,12 +44,14 @@ SignRule-Decide 4B on the same items: dangerous yes/no errors ("can sign" when t
 
 ## data
 
-| Register | Read from the register | Kept | Unique (text, roles) | Train / val / test |
+| Register | Companies read | Kept | Unique | Train / val / test |
 |---|---|---|---|---|
-| Norway | 637,492 companies (1,274,984 API responses) | 597,487 | 31,583 | 25,394 / 2,729 / 3,460 |
-| Austria | 239,474 company extracts | 206,553 | 7,710 patterns | 6,197 / 744 / 769 (+ 2,500 pilot) |
-| Denmark | 143,646 companies | 143,311 | 14,147 | evaluation only |
-| **Total** | **1,020,612 companies** |  |  | **31,591 training cases**, 2 epochs, 37.7 M tokens |
+| Norway | 637,492 | 597,487 | 31,583 | 25,394 / 2,729 / 3,460 |
+| Austria | 239,474 | 206,553 | 7,710 | 6,197 / 744 / 769 |
+| Denmark | 143,646 | 143,311 | 14,147 | evaluation only |
+| **Total** | **1,020,612** |  |  | **31,591** training cases |
+
+Companies read: Norway with 1,274,984 API responses (signing and procuration); Austria company extracts. Unique = distinct (text, roles) groups; Austria: date-normalised patterns, plus a frozen pilot of 2,500 companies. Training: 2 epochs, 37.7 M tokens.
 
 ## prereg
 

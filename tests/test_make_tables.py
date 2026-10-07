@@ -36,4 +36,5 @@ def test_markdown_tables_convert_to_latex():
     tex = mt.to_latex(md)
     assert "\\begin{tabular}{lr}" in tex and "\\toprule" in tex
     assert "\\textbf{SignRule-Decide 4B} & 99.3\\,\\% \\\\" in tex
-    assert "Note with 1.3\\,\\%." in tex
+    assert "Note" not in tex  # the note never sits inside the tabular (it would be scaled with it)
+    assert mt.latex_note(md) == "Note with 1.3\\,\\%."

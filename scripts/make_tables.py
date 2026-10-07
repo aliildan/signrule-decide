@@ -139,7 +139,7 @@ def other_registers() -> str:
         cm, _ = coalition_mean(pq)
         rows.append(
             [
-                "Norway, texts the official interpreter could not read (250)",
+                "Norway (250, beyond the interpreter)",
                 pct(acc(pq, "ceo_alone")),
                 pct(cm),
                 pct(acc(pq, "min_signers")),
@@ -168,7 +168,7 @@ def other_registers() -> str:
             "Coalitions",
             "Min. signers",
             "Rule type",
-            "Register in training?",
+            "In training?",
         ],
         rows,
     )
@@ -199,43 +199,43 @@ def data() -> str:
     rows = [
         [
             "Norway",
-            f"{no['entities_read']:,} companies ({no['api_responses']:,} API responses)",
+            f"{no['entities_read']:,}",
             f"{no['entities_kept']:,}",
             f"{no['unique_groups']:,}",
             f"{no['train']:,} / {no['val']:,} / {no['test']:,}",
         ],
         [
             "Austria",
-            f"{at['extracts_read']:,} company extracts",
+            f"{at['extracts_read']:,}",
             f"{at['companies_kept']:,}",
-            f"{at['unique_patterns']:,} patterns",
-            f"{at['train']:,} / {at['val']:,} / {at['test']:,} (+ {at['pilot']:,} pilot)",
+            f"{at['unique_patterns']:,}",
+            f"{at['train']:,} / {at['val']:,} / {at['test']:,}",
         ],
         [
             "Denmark",
-            f"{dk['companies_read']:,} companies",
+            f"{dk['companies_read']:,}",
             f"{dk['companies_kept']:,}",
             f"{dk['unique_texts']:,}",
             "evaluation only",
         ],
         [
             "**Total**",
-            f"**{d['total_companies_read']:,} companies**",
+            f"**{d['total_companies_read']:,}**",
             "",
             "",
-            f"**{tr['training_cases']:,} training cases**, {tr['epochs']} epochs, "
-            f"{tr['forward_tokens'] / 1e6:.1f} M tokens",
+            f"**{tr['training_cases']:,}** training cases",
         ],
     ]
-    return table(
-        [
-            "Register",
-            "Read from the register",
-            "Kept",
-            "Unique (text, roles)",
-            "Train / val / test",
-        ],
-        rows,
+    note = (
+        f"Companies read: Norway with {no['api_responses']:,} API responses (signing and "
+        f"procuration); Austria company extracts. Unique = distinct (text, roles) groups; "
+        f"Austria: date-normalised patterns, plus a frozen pilot of {at['pilot']:,} companies. "
+        f"Training: {tr['epochs']} epochs, {tr['forward_tokens'] / 1e6:.1f} M tokens."
+    )
+    return (
+        table(["Register", "Companies read", "Kept", "Unique", "Train / val / test"], rows)
+        + "\n\n"
+        + note
     )
 
 
@@ -269,6 +269,7 @@ def compute() -> str:
 def _tex(cell: str) -> str:
     cell = re.sub(r"\*\*(.+?)\*\*", r"\\textbf{\1}", cell.strip())
     cell = cell.replace(" %", "\\,\\%").replace("&", "\\&").replace("_", "\\_")
+    cell = cell.replace("<=", "$\\le$").replace(">=", "$\\ge$")
     return cell.replace('"', "''")
 
 
@@ -279,7 +280,6 @@ def to_latex(md: str, spec: str | None = None) -> str:
     """A generated markdown table (plus trailing note) as a booktabs tabular."""
     lines = md.strip().split("\n")
     rows = [line for line in lines if line.startswith("|")]
-    rest = [line for line in lines if not line.startswith("|") and line.strip()]
     cells = [[c for c in r.strip("|").split("|")] for r in rows if not set(r) <= set("|-")]
     head, body = cells[0], cells[1:]
     spec = spec or f"l{'r' * (len(head) - 1)}"
@@ -288,9 +288,13 @@ def to_latex(md: str, spec: str | None = None) -> str:
     out.append("\\midrule")
     out += [" & ".join(_tex(c) for c in r) + " \\\\" for r in body]
     out += ["\\bottomrule", "\\end{tabular}"]
-    if rest:
-        out += ["", " ".join(_tex(x) for x in rest)]
     return "\n".join(out)
+
+
+def latex_note(md: str) -> str:
+    """The text after a generated table (a note), as LaTeX; "" if there is none."""
+    rest = [line for line in md.strip().split("\n") if not line.startswith("|") and line.strip()]
+    return " ".join(_tex(x) for x in rest)
 
 
 TABLES = {
@@ -347,6 +351,12 @@ def main(argv: list[str] | None = None) -> int:
     out.write_text(release, encoding="utf-8")
     for name, tex in latex.items():
         (out.parent / f"{name}.tex").write_text(tex, encoding="utf-8")
+        note = latex_note(tables[name])
+        note_path = out.parent / f"{name}-note.tex"
+        if note:
+            note_path.write_text(note + "\n", encoding="utf-8")
+        elif note_path.exists():
+            note_path.unlink()
     print(f"make_tables: wrote {len(tables)} tables; updated {stale or 'nothing'}")
     return 0
 
