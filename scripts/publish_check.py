@@ -24,6 +24,7 @@ PUBLIC_FILES = {
     "README.md",
     "LICENSE",
     "model_card.md",
+    "CITATION.cff",
     "pyproject.toml",
     "uv.lock",
     "Makefile",

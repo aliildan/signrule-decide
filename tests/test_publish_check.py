@@ -162,6 +162,7 @@ def test_public_allow_list():
     assert not pc.is_public("tests/test_guard_hook.py")
     assert not pc.is_public("tests/test_claude_config.py")
     assert pc.is_public("pyproject.toml") and pc.is_public("uv.lock")
+    assert pc.is_public("CITATION.cff")
     assert not pc.is_public(".claude/agents/x.md")
     assert not pc.is_public(".github/workflows/ci.yml")
     assert not pc.is_public("docs/ROADMAP.md")

@@ -1,0 +1,34 @@
+cff-version: 1.2.0
+message: "If you use SignRule-Decide, please cite it as below."
+title: "SignRule-Decide: typed, calibrated decisions on company representation rules (Austria first)"
+authors:
+  - family-names: Ildan
+    given-names: Ali
+version: 1.0.0
+date-released: 2026-10-07
+license: Apache-2.0
+repository-code: "https://github.com/aliildan/signrule-decide"
+url: "https://huggingface.co/aildan/signrule-decide-4b"
+abstract: >-
+  A 4B-parameter typed decision model that reads the signing / representation rule of a company as
+  published by an official commercial register, together with the registered roles, and answers
+  fixed questions (can a managing director act alone, which coalitions can bind the company, how
+  many signatures are needed) with calibrated probabilities and an abstention option, without
+  generating text. Trained only on labels from the registers themselves (Norway's rule
+  interpreter, Austrian court codes); evaluated on Austrian, Norwegian and Danish reference sets.
+keywords:
+  - know-your-business
+  - company register
+  - Firmenbuch
+  - signing rules
+  - calibration
+  - selective prediction
+  - decision model
+preferred-citation:
+  type: article
+  title: "Who May Sign? Typed, Calibrated Decisions on Company Representation Rules in the Austrian Commercial Register"
+  authors:
+    - family-names: Ildan
+      given-names: Ali
+  year: 2026
+  url: "https://github.com/aliildan/signrule-decide"
