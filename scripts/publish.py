@@ -36,6 +36,16 @@ def tracked_public(src: Path) -> list[str]:
     )
 
 
+def dirty_public(src: Path) -> list[str]:
+    """Public files with uncommitted (staged or unstaged) changes: the public repo must never run
+    ahead of the private history."""
+    out = subprocess.run(
+        ["git", "status", "--porcelain", "-z"], cwd=src, check=True, capture_output=True
+    ).stdout.split(b"\0")
+    paths = [e[3:].decode() for e in out if len(e) > 3]
+    return sorted(p for p in paths if is_public(p))
+
+
 def build_tree(src: Path, out: Path) -> list[str]:
     """Scan, then copy the allow-listed tracked files of `src` into `out` (its .git is kept)."""
     files = tracked_public(src)
@@ -81,6 +91,9 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--message", default="Release")
     ap.add_argument("--push", action="store_true")
     a = ap.parse_args(argv)
+    dirty = dirty_public(REPO)
+    if dirty:
+        raise SystemExit(f"publish: commit these public files first: {dirty}")
     files = build_tree(REPO, a.out)
     print(f"publish: {len(files)} files scanned and copied to {a.out}")
     changed = commit(a.out, a.message)

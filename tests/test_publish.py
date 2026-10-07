@@ -54,3 +54,18 @@ def test_a_violation_aborts_before_anything_is_written(tmp_path):
     with pytest.raises(SystemExit, match="violation"):
         publish.build_tree(src, out)
     assert not out.exists()
+
+
+def test_uncommitted_public_changes_block_publishing(tmp_path):
+    src = _repo(
+        tmp_path, {"README.md": "# fixture\n", "src/x.py": "X = 1\n", "docs/n.md": "private\n"}
+    )
+    subprocess.run(
+        ["git", "-c", "user.name=f", "-c", "user.email=f@f", "commit", "-qm", "c"],
+        cwd=src,
+        check=True,
+    )
+    assert publish.dirty_public(src) == []
+    (src / "src/x.py").write_text("X = 2\n")  # public file changed, not committed
+    (src / "docs/n.md").write_text("changed\n")  # private file: irrelevant
+    assert publish.dirty_public(src) == ["src/x.py"]
