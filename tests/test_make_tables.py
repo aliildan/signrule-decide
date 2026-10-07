@@ -15,7 +15,7 @@ def _pq(**acc):
 
 
 def test_coalition_mean_is_weighted_by_items():
-    pq = _pq(two_ceos=(1.0, 30), member_alone=(0.5, 10), ceo_alone=(0.0, 99))
+    pq = _pq(two_ceos=(1.0, 30), member_alone=(0.5, 10), min_signers=(0.0, 99))
     assert mt.coalition_mean(pq) == (35 / 40, 40)
 
 
@@ -38,3 +38,22 @@ def test_markdown_tables_convert_to_latex():
     assert "\\textbf{SignRule-Decide 4B} & 99.3\\,\\% \\\\" in tex
     assert "Note" not in tex  # the note never sits inside the tabular (it would be scaled with it)
     assert mt.latex_note(md) == "Note with 1.3\\,\\%."
+
+
+def test_headline_table_has_the_key_austrian_numbers():
+    md = mt.headline()
+    assert md.startswith("| Austria, 400 extracts never trained on | SignRule-Decide 4B |")
+    for label in (
+        "Managing director alone",
+        "coalition questions",
+        "Minimum signers",
+        "Dangerous errors",
+        "2 % risk",
+    ):
+        assert label in md
+
+
+def test_coalition_set_matches_the_ontology_used_by_the_reports():
+    from signrule.ontology.coalitions import ALL_COALITIONS
+
+    assert set(mt.COALITIONS) == set(ALL_COALITIONS)  # 15: the pre-registered definition

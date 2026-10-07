@@ -19,7 +19,13 @@ from typing import Any
 REPO = Path(__file__).resolve().parent.parent
 RESULTS = REPO / "results"
 DOCS = ("README.md", "model_card.md")
+# The 15 yes/no office and coalition questions (signrule.ontology.coalitions.ALL_COALITIONS, the
+# pre-registered "coalition mean"); kept literal so this script runs without the package (CI).
 COALITIONS = (
+    "ceo_alone",
+    "chair_alone",
+    "two_board_members_jointly",
+    "ceo_with_one_board_member",
     "member_alone",
     "two_ceos",
     "ceo_with_chair",
@@ -96,7 +102,7 @@ def at_gold() -> str:
         "Austria, reference set (400)",
         "GF alone",
         "Chair alone",
-        "Coalitions (11)",
+        "Coalitions (15)",
         "Min. signers",
         "Rule type",
     ]
@@ -108,6 +114,29 @@ def at_gold() -> str:
         f"{pct(rep['alpha_2pct']['risk'])}."
     )
     return table(head, rows) + note
+
+
+def headline() -> str:
+    """The README's at-a-glance numbers (release model, Austrian reference set)."""
+    pq = load("at-random-to-at-gold", RELEASE)["per_question"]
+    rep = json.loads((RESULTS / "plan16" / "at-report.json").read_text())["at:gold (both batches)"]
+    cm, n = coalition_mean(pq)
+    rows = [
+        ["Managing director alone", pct(acc(pq, "ceo_alone"))],
+        [f"Office and coalition questions (15 yes/no, {n:,} answers)", pct(cm)],
+        ["Minimum signers", pct(acc(pq, "min_signers"))],
+        ["Rule type (14 patterns)", pct(acc(pq, "rule_type"))],
+        [
+            'Dangerous errors ("can sign" when it cannot)',
+            f"{pct(rep['dangerous_rate'])} ({rep['dangerous']} of {rep['yes_no_items']:,})",
+        ],
+        [
+            "At a 2 % risk target",
+            f"answers {pct(rep['alpha_2pct']['coverage'])}, "
+            f"observed risk {pct(rep['alpha_2pct']['risk'])}",
+        ],
+    ]
+    return table(["Austria, 400 extracts never trained on", "SignRule-Decide 4B"], rows)
 
 
 def at_structures() -> str:
@@ -298,6 +327,7 @@ def latex_note(md: str) -> str:
 
 
 TABLES = {
+    "headline": headline,
     "at-gold": at_gold,
     "at-structures": at_structures,
     "other-registers": other_registers,

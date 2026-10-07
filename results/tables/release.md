@@ -1,12 +1,23 @@
+## headline
+
+| Austria, 400 extracts never trained on | SignRule-Decide 4B |
+|---|---|
+| Managing director alone | 100.0 % |
+| Office and coalition questions (15 yes/no, 2,178 answers) | 99.3 % |
+| Minimum signers | 97.7 % |
+| Rule type (14 patterns) | 94.6 % |
+| Dangerous errors ("can sign" when it cannot) | 0.6 % (12 of 2,178) |
+| At a 2 % risk target | answers 99.9 %, observed risk 1.3 % |
+
 ## at-gold
 
-| Austria, reference set (400) | GF alone | Chair alone | Coalitions (11) | Min. signers | Rule type |
+| Austria, reference set (400) | GF alone | Chair alone | Coalitions (15) | Min. signers | Rule type |
 |---|---|---|---|---|---|
 | **SignRule-Decide 4B** | 100.0 % | 100.0 % | 99.3 % | 97.7 % | 94.6 % |
 | mmBERT-base, fine-tuned (1,024 tokens) | 100.0 % | 100.0 % | 98.8 % | 96.9 % | 94.3 % |
-| XLM-R-large, fine-tuned (512 tokens) | 73.5 % | 95.8 % | 92.4 % | 63.5 % | 54.8 % |
-| Phrase table (rules from the training labels) | 100.0 % | 100.0 % | 91.4 % | 80.2 % | 75.7 % |
-| Keyword rules (selbständig / gemeinsam) | 100.0 % | 100.0 % | 54.3 % | 35.0 % | 11.1 % |
+| XLM-R-large, fine-tuned (512 tokens) | 73.5 % | 95.8 % | 89.3 % | 63.5 % | 54.8 % |
+| Phrase table (rules from the training labels) | 100.0 % | 100.0 % | 92.1 % | 80.2 % | 75.7 % |
+| Keyword rules (selbständig / gemeinsam) | 100.0 % | 100.0 % | 59.1 % | 35.0 % | 11.1 % |
 
 SignRule-Decide 4B on the same items: dangerous yes/no errors ("can sign" when the answer is "cannot") 12 of 2178 (0.6 %); at a 2 % risk target it answers 99.9 % of the questions with an observed risk of 1.3 %.
 

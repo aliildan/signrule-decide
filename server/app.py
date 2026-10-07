@@ -220,6 +220,28 @@ def load_policy(results_json: Path) -> AbstainPolicy:
     )
 
 
+def pick_device(requested: str, cuda: bool, mps: bool) -> str:
+    """An explicit --device wins; "auto" follows kev.device.default_device (cuda, mps, cpu)."""
+    if requested != "auto":
+        return requested
+    return "cuda" if cuda else "mps" if mps else "cpu"
+
+
+def serving_options(device: str, opts: Any) -> Any:
+    """Load options per device: bf16 on CUDA (as benchmarked); on Apple silicon Kev's backend="auto"
+    (the MLX backend for the hybrid Qwen3.5 backbone when mlx-lm is installed, else torch on MPS);
+    fp32 on CPU. A backend the caller set (KEV_BACKEND) is kept."""
+    from dataclasses import replace
+
+    import torch
+
+    if device == "cuda":
+        return replace(opts, dtype=torch.bfloat16)
+    if device == "mps":
+        return opts if opts.backend else replace(opts, backend="auto")
+    return replace(opts, dtype=torch.float32)
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(
         description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
@@ -234,10 +256,10 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--alpha", type=float, default=0.02)
     ap.add_argument("--host", default="127.0.0.1")
     ap.add_argument("--port", type=int, default=8300)
+    ap.add_argument("--device", default="auto", choices=["auto", "cuda", "mps", "cpu"])
     a = ap.parse_args(argv)
 
     import os
-    from dataclasses import replace
 
     import torch
     import uvicorn
@@ -248,10 +270,12 @@ def main(argv: list[str] | None = None) -> int:
     os.environ.setdefault(
         "KEV_TEMPERATURE", "1.0"
     )  # raw probabilities; we apply our own temperatures
-    opts = replace(LoadOptions.from_env(), dtype=torch.bfloat16)
+    device = pick_device(a.device, torch.cuda.is_available(), torch.backends.mps.is_available())
+    opts = serving_options(device, LoadOptions.from_env())
     ck = Checkpoint(a.run)
-    tok, model = ck.load("cuda", opts)
-    kev_server = Server(ck, tok, model, "cuda")
+    print(f"serving on {device}, backend {ck.backend(device, opts)}", flush=True)
+    tok, model = ck.load(device, opts)
+    kev_server = Server(ck, tok, model, device)
 
     async def answer(req: dict[str, Any]) -> dict[str, Any]:
         return await kev_server.answer_async(SystemOneRequest.model_validate(req))

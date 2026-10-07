@@ -1,17 +1,31 @@
+<div align="center">
+
 # SignRule-Decide
 
-**Who can sign for this company? Typed, calibrated answers from Austrian register extracts —
-locally, without sending data anywhere.**
+### Who may sign for this company?
 
-[Licence: Apache-2.0](LICENSE) · Python 3.12 · 4B parameters · one GPU · [open weights](https://huggingface.co/aildan/signrule-decide-4b) · [paper](https://doi.org/10.5281/zenodo.23224942) · [DOI 10.5281/zenodo.23224891](https://doi.org/10.5281/zenodo.23224891)
+Typed, calibrated answers from official commercial-register extracts,<br>
+computed on your own GPU, with no register data sent anywhere.
+
+[![Licence: Apache-2.0](https://img.shields.io/badge/licence-Apache--2.0-blue.svg)](LICENSE)
+[![Python 3.12](https://img.shields.io/badge/python-3.12-3776AB.svg?logo=python&logoColor=white)](pyproject.toml)
+[![Model on Hugging Face](https://img.shields.io/badge/%F0%9F%A4%97%20model-signrule--decide--4b-FFD21E.svg)](https://huggingface.co/aildan/signrule-decide-4b)
+[![Paper](https://img.shields.io/badge/paper-10.5281%2Fzenodo.23224942-1682D4.svg)](https://doi.org/10.5281/zenodo.23224942)
+[![Software DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23224891.svg)](https://doi.org/10.5281/zenodo.23224891)
+
+[Quick start](#quick-start) · [Accuracy](#accuracy) · [How it works](#how-it-works) ·
+[Limitations](#limitations-and-responsible-use) · [Model card](model_card.md) ·
+[Paper](https://doi.org/10.5281/zenodo.23224942)
+
+</div>
 
 ---
 
-Every KYB onboarding needs the answer to one question: *who may bind this company?* The Austrian
-Firmenbuch publishes the answer as German free text for every managing director, board member,
-partner and Prokurist — and no machine interpretation. Today an analyst reads it by hand.
+Every KYB onboarding has to answer one question: *who may bind this company?* For every managing
+director, board member, partner and Prokurist, the Austrian Firmenbuch publishes the answer as
+German free text, and nothing interprets it by machine. Today an analyst reads it by hand.
 
-SignRule-Decide reads the register text and the registered roles and returns the decision, not a
+SignRule-Decide reads the register text and the registered roles. It returns a decision, not a
 summary:
 
 > **Geschäftsführer [PERSON_1]:** vertritt seit 01.03.2019 gemeinsam mit einem weiteren
@@ -26,100 +40,109 @@ summary:
 | Minimum number of signatures | **2** | 1.00 |
 | Is the procuration joint (Gesamtprokura)? | **yes** | 1.00 |
 
-More examples, in German: [`results/demo/demo-de.md`](results/demo/demo-de.md).
+When the model is not confident enough for the risk level you chose, it does not guess. It answers
+`abstain: true` and the question goes to a person. More examples, in German:
+[`results/demo/demo-de.md`](results/demo/demo-de.md).
+
+## At a glance
+
+<!-- table:headline -->
+| Austria, 400 extracts never trained on | SignRule-Decide 4B |
+|---|---|
+| Managing director alone | 100.0 % |
+| Office and coalition questions (15 yes/no, 2,178 answers) | 99.3 % |
+| Minimum signers | 97.7 % |
+| Rule type (14 patterns) | 94.6 % |
+| Dangerous errors ("can sign" when it cannot) | 0.6 % (12 of 2,178) |
+| At a 2 % risk target | answers 99.9 %, observed risk 1.3 % |
+<!-- /table -->
+
+All numbers in this README are generated from [`results/`](results/) by `scripts/make_tables.py`.
+The 400 Austrian extracts are a reference set: two different AI assistants answered each one
+independently, only the answers they agree on are kept, and a person checked a sample. The numbers
+measure agreement with that consensus, not with fully human labels
+([details](#evaluation-data)).
 
 ## Why SignRule-Decide
 
-- **Decisions, not text.** Every answer is a probability over fixed options (yes/no, a number of
-  signers, a rule type). Nothing is generated, so nothing is invented.
-- **Knows when to stay silent.** Answers are calibrated per question type, and the server abstains
-  when a question cannot be answered within the risk level you choose (1, 2 or 5 %).
-- **Private by design.** It never needs names: callers pass roles and counts, names are masked as
-  `[PERSON_n]`, and the model runs on your own hardware.
-- **One model, one question set, several registers.** Austria and Norway today, Denmark as a beta.
-- **Open.** Code, weights and every evaluation number are public (Apache-2.0); the data can be
-  re-fetched from the official registers with the included scripts.
+| | |
+|---|---|
+| **Decisions, not text** | Every answer is a probability over fixed options: yes/no, a number of signers, a rule type. Nothing is generated, so nothing can be made up. |
+| **Knows when to stay silent** | Probabilities are calibrated per question type. At the risk level you choose (1, 2 or 5 %), the server abstains on any question it cannot answer within it. |
+| **Private by design** | Names are never needed: callers pass roles and counts. Names sent anyway are removed and masked as `[PERSON_n]` in the text, and a text that still looks like it holds a name abstains. Everything runs on your own hardware. |
+| **One model, many questions** | 15 office and coalition questions, the minimum number of signers, the rule type and procuration, all asked of one extract in one request. |
+| **Several registers** | Austria and Norway are validated; Denmark is in beta. One question set and one API cover all three. |
+| **Open** | Code, weights and every evaluation number are public under Apache-2.0. The included scripts re-fetch the data from the official registers. |
 
-## Accuracy at a glance
+## How it works
 
-Austria, reference set: 400 free-text extracts that no model was trained on. Every number is
-generated from [`results/`](results/) by `scripts/make_tables.py`.
+```mermaid
+flowchart LR
+    A["Register extract<br/>text + roles"] --> B["Mask names<br/>[PERSON_n]"]
+    B --> C["SignRule-Decide 4B<br/>Qwen3.5 + LoRA<br/>+ pointer head"]
+    C --> D["Calibration<br/>per register<br/>+ consistency check"]
+    D -->|confident| E["Typed answer<br/>yes / no · 1 · 2 · rule type"]
+    D -->|not confident| F["Abstain<br/>→ human review"]
+```
 
-<!-- table:at-gold -->
-| Austria, reference set (400) | GF alone | Chair alone | Coalitions (11) | Min. signers | Rule type |
-|---|---|---|---|---|---|
-| **SignRule-Decide 4B** | 100.0 % | 100.0 % | 99.3 % | 97.7 % | 94.6 % |
-| mmBERT-base, fine-tuned (1,024 tokens) | 100.0 % | 100.0 % | 98.8 % | 96.9 % | 94.3 % |
-| XLM-R-large, fine-tuned (512 tokens) | 73.5 % | 95.8 % | 92.4 % | 63.5 % | 54.8 % |
-| Phrase table (rules from the training labels) | 100.0 % | 100.0 % | 91.4 % | 80.2 % | 75.7 % |
-| Keyword rules (selbständig / gemeinsam) | 100.0 % | 100.0 % | 54.3 % | 35.0 % | 11.1 % |
-
-SignRule-Decide 4B on the same items: dangerous yes/no errors ("can sign" when the answer is "cannot") 12 of 2178 (0.6 %); at a 2 % risk target it answers 99.9 % of the questions with an observed risk of 1.3 %.
-<!-- /table -->
-
-How the reference set was made — read this before quoting the numbers: each extract was answered
-independently by **two different AI assistants**, only answers both agree on are kept, and a person
-spot-checked a sample. The numbers therefore measure agreement with that consensus, not with fully
-human labels (see [Evaluation data](#evaluation-data)).
-
-A small encoder (mmBERT-base, about 300M parameters) fine-tuned on the same Austrian labels comes
-close on this set. SignRule-Decide makes fewer structural errors and ranks its own confidence
-better, which is what the abstention relies on. If you need only Austria and only these questions,
-a fine-tuned encoder is a valid, cheaper choice.
-
-## Supported registers
-
-| Register | Status | Evidence |
-|---|---|---|
-| **Austria** — Firmenbuch | **Validated** | official court codes in training; reference set of 400 above |
-| **Norway** — Brønnøysundregistrene | **Validated** | the register's own interpreter as training labels; 250 texts the interpreter could *not* read |
-| **Denmark** — CVR | **Beta** (never trained on) | 300-item reference set, zero-shot; see limitations |
-| Anything else | Untested | — |
-
-<!-- table:other-registers -->
-| Reference set | CEO alone | Coalitions | Min. signers | Rule type | In training? |
-|---|---|---|---|---|---|
-| Norway (250, beyond the interpreter) | 100.0 % | 99.0 % | 98.0 % | 93.0 % | trained |
-| Denmark (300) | 89.2 % | 92.5 % | 86.4 % | 62.4 % | **never seen** |
-<!-- /table -->
-
-The second Austrian batch focuses on the structures that are hardest to read:
-
-<!-- table:at-structures -->
-| Structure (second batch, 200) | Coalitions | Min. signers | Dangerous errors |
-|---|---|---|---|
-| Vorstand (AG, Genossenschaft, Privatstiftung) | 99.7 % | 99.1 % | 3 / 924 |
-| Partnerships (OG, KG) | 97.7 % | 95.8 % | 3 / 176 |
-| GmbH with several Geschäftsführer | 99.4 % | 100.0 % | 1 / 165 |
-<!-- /table -->
-
-Register-labelled test parts (official codes as labels; wording shared with training, so near
-ceiling):
-
-<!-- table:in-distribution -->
-| Register-labelled test (codes / interpreter) | Coalitions | Min. signers | Rule type |
-|---|---|---|---|
-| Norway, held-out texts | 100.0 % | 99.7 % | 99.8 % |
-| Austria, held-out patterns | 100.0 % | 100.0 % | 99.8 % |
-| Austria, frozen pilot (2,500 companies) | 100.0 % | 100.0 % | 100.0 % |
-<!-- /table -->
+- **Backbone:** `Qwen/Qwen3.5-4B-Base` (Apache-2.0) with a LoRA adapter and a
+  [Kev](https://github.com/jaredpalmer/kev) pointer head. Each answer option is scored against the
+  question, and a softmax over the options gives the answer.
+- **Labels come from the registers.** Norway's register interprets its own signing rules and
+  publishes rule codes. Austria's court codes each person's power as alone or joint. For joint
+  powers, a hand-written, reviewed table of the register's standard wording names the partner.
+  Training uses no synthetic examples and no labels produced by a language model.
+- **One representation for every register:** alternatives (OR) of groups (AND) of offices. Every
+  answer is derived from it.
+- **Calibration:** one temperature per question type, plus Learn-then-Test thresholds per
+  register, both fitted on validation data only. A register without its own thresholds gets the
+  strictest combination, and the response says so (`jurisdiction_calibrated: false`). If no single
+  signing rule could produce a combination of answers, those answers abstain.
 
 ## Quick start
 
+**1. Install.** You need [uv](https://docs.astral.sh/uv/) and Python 3.12. The base model has
+4.66 B parameters, so its 16-bit weights take about 9.3 GB of GPU or unified memory.
+
+<table>
+<tr><th>Linux + NVIDIA GPU (tested)</th><th>macOS, Apple silicon (experimental)</th></tr>
+<tr><td>
+
 ```bash
-git clone https://github.com/aliildan/signrule-decide && cd signrule-decide && uv sync
-hf download aildan/signrule-decide-4b --local-dir runs/signrule-decide-4b
+git clone https://github.com/aliildan/signrule-decide
+cd signrule-decide
+uv sync    # CUDA 12.8 wheels; RTX 5090 tested
+```
+
+</td><td>
+
+```bash
+git clone https://github.com/aliildan/signrule-decide
+cd signrule-decide
+uv sync    # PyPI torch (MPS) + mlx-lm
+```
+
+</td></tr>
+</table>
+
+The macOS path resolves and installs without the CUDA-only packages, and the server then uses Kev's
+MLX backend. It has not yet been confirmed end to end on a Mac, so please
+[open an issue](https://github.com/aliildan/signrule-decide/issues) if it fails for you.
+
+**2. Download the weights and start the server.**
+
+```bash
+uv run hf download aildan/signrule-decide-4b --local-dir runs/signrule-decide-4b
 uv run python server/app.py --run runs/signrule-decide-4b \
   --policy NO=runs/signrule-decide-4b/calibration/NO.json \
   --policy AT=runs/signrule-decide-4b/calibration/AT.json      # /v1/systemone on localhost:8300
 ```
 
-Weights: [huggingface.co/aildan/signrule-decide-4b](https://huggingface.co/aildan/signrule-decide-4b).
-Ollama (v0.35+) serves decision models over the same `/v1/systemone` API, for the Clef, Laya and
-Strands Decider architectures; this checkpoint is in Kev's format, which Ollama does not load yet,
-so use this server — the requests are the same.
+`--device auto` is the default: CUDA, then Apple silicon, then CPU. The server prints the device
+it picked. `--alpha` sets the risk level (default `0.02`).
 
-Ask questions with the canonical wordings from `configs/questions.yaml`:
+**3. Ask.** Use the canonical wordings from `configs/questions.yaml`, because the calibration
+belongs to those wordings:
 
 ```python
 import httpx, yaml
@@ -138,14 +161,94 @@ for q, a in r.json()["answers"].items():
     print(q, a.get("noul", a.get("choice")), "abstain" if a["abstain"] else "")
 ```
 
-Each answer carries `noul` (probability of "yes") or `choice` + `probabilities`, `calibrated`
-(true for the canonical wordings) and `abstain` with a reason. The API follows the System One
-schema (`/v1/systemone`), so existing Jev/Kev clients work unchanged.
+Each answer carries either `noul` (the probability of "yes") or `choice` with `probabilities`. It
+also carries `calibrated` (true for the canonical wordings) and `abstain`, with a reason when it
+abstains. The API follows the System One schema (`/v1/systemone`), so existing Jev and Kev clients
+work unchanged. To see the hand-written German examples against your own server, run
+`uv run python scripts/demo.py --lang de`.
 
-## Data
+> **Ollama.** Ollama (v0.35+) serves decision models over the same `/v1/systemone` API, for the
+> Clef, Laya and Strands Decider architectures. This checkpoint is in Kev's format, which Ollama
+> does not load yet, so use the server above. The requests are identical.
 
-About a million official company registrations were read; because register texts repeat
-heavily, they reduce to about 31 thousand distinct training cases (text and roles).
+## Accuracy
+
+The 400 Austrian extracts are free-text extracts that no model was trained on:
+
+<!-- table:at-gold -->
+| Austria, reference set (400) | GF alone | Chair alone | Coalitions (15) | Min. signers | Rule type |
+|---|---|---|---|---|---|
+| **SignRule-Decide 4B** | 100.0 % | 100.0 % | 99.3 % | 97.7 % | 94.6 % |
+| mmBERT-base, fine-tuned (1,024 tokens) | 100.0 % | 100.0 % | 98.8 % | 96.9 % | 94.3 % |
+| XLM-R-large, fine-tuned (512 tokens) | 73.5 % | 95.8 % | 89.3 % | 63.5 % | 54.8 % |
+| Phrase table (rules from the training labels) | 100.0 % | 100.0 % | 92.1 % | 80.2 % | 75.7 % |
+| Keyword rules (selbständig / gemeinsam) | 100.0 % | 100.0 % | 59.1 % | 35.0 % | 11.1 % |
+
+SignRule-Decide 4B on the same items: dangerous yes/no errors ("can sign" when the answer is "cannot") 12 of 2178 (0.6 %); at a 2 % risk target it answers 99.9 % of the questions with an observed risk of 1.3 %.
+<!-- /table -->
+
+**An honest comparison.** A small encoder (mmBERT-base, about 300M parameters) fine-tuned on the
+same Austrian labels comes close on this set. SignRule-Decide makes fewer structural errors and
+ranks its own confidence better, and the abstention depends on that ranking. If you need only
+Austria and only these questions, a fine-tuned encoder is a valid, cheaper choice.
+
+### Supported registers
+
+| Register | Status | Evidence |
+|---|---|---|
+| 🇦🇹 **Austria**: Firmenbuch | **Validated** | official court codes in training; reference set of 400 above |
+| 🇳🇴 **Norway**: Brønnøysundregistrene | **Validated** | the register's own interpreter as training labels; 250 texts the interpreter could *not* read |
+| 🇩🇰 **Denmark**: CVR | **Beta** (never trained on) | 300-item reference set, zero-shot; see limitations |
+| Anything else | Untested | — |
+
+<!-- table:other-registers -->
+| Reference set | CEO alone | Coalitions | Min. signers | Rule type | In training? |
+|---|---|---|---|---|---|
+| Norway (250, beyond the interpreter) | 100.0 % | 99.0 % | 98.0 % | 93.0 % | trained |
+| Denmark (300) | 89.2 % | 92.5 % | 86.4 % | 62.4 % | **never seen** |
+<!-- /table -->
+
+<details>
+<summary><b>Hardest Austrian structures</b> (second reference batch)</summary>
+
+<!-- table:at-structures -->
+| Structure (second batch, 200) | Coalitions | Min. signers | Dangerous errors |
+|---|---|---|---|
+| Vorstand (AG, Genossenschaft, Privatstiftung) | 99.7 % | 99.1 % | 3 / 924 |
+| Partnerships (OG, KG) | 97.7 % | 95.8 % | 3 / 176 |
+| GmbH with several Geschäftsführer | 99.4 % | 100.0 % | 1 / 165 |
+<!-- /table -->
+
+</details>
+
+<details>
+<summary><b>Register-labelled test parts</b> (official codes as labels; wording shared with training, so near ceiling)</summary>
+
+<!-- table:in-distribution -->
+| Register-labelled test (codes / interpreter) | Coalitions | Min. signers | Rule type |
+|---|---|---|---|
+| Norway, held-out texts | 100.0 % | 99.7 % | 99.8 % |
+| Austria, held-out patterns | 100.0 % | 100.0 % | 99.8 % |
+| Austria, frozen pilot (2,500 companies) | 100.0 % | 100.0 % | 100.0 % |
+<!-- /table -->
+
+</details>
+
+### Evaluation data
+
+| Set | Labels | Size |
+|---|---|---|
+| Register-labelled test parts | official codes (Norway interpreter, Austrian court codes) | thousands of texts, see the tables |
+| Reference sets (Austria, Norway, Denmark) | two different AI assistants answered independently; kept where both agree; human spot checks | 400 / 250 / 300 extracts |
+
+The hypotheses and decision rules were written down before any result was read. The project owner
+chose the release model even though it missed one criterion, on the experimental ambiguity score.
+The [model card](model_card.md) documents both.
+
+## Data and hardware
+
+About a million official company registrations were read. Register texts repeat heavily, so they
+reduce to about 31 thousand distinct training cases (text and roles).
 
 <!-- table:data -->
 | Register | Companies read | Kept | Unique | Train / val / test |
@@ -158,9 +261,7 @@ heavily, they reduce to about 31 thousand distinct training cases (text and role
 Companies read: Norway with 1,274,984 API responses (signing and procuration); Austria company extracts. Unique = distinct (text, roles) groups; Austria: date-normalised patterns, plus a frozen pilot of 2,500 companies. Training: 2 epochs, 37.7 M tokens.
 <!-- /table -->
 
-## Hardware
-
-Trained and served on one consumer GPU; no cloud.
+Training and serving ran on one consumer GPU, with no cloud:
 
 <!-- table:compute -->
 | Compute | Value |
@@ -171,51 +272,27 @@ Trained and served on one consumer GPU; no cloud.
 | Serving (one request, 8.5 questions) | p50 160 ms, p95 175 ms, 6.7 requests/s |
 <!-- /table -->
 
-Serving latency was measured with an earlier checkpoint of the same 4B architecture.
-
-## How it works
-
-- **Backbone:** `Qwen/Qwen3.5-4B-Base` (Apache-2.0), LoRA adapter, and a
-  [Kev](https://github.com/jaredpalmer/kev) pointer head: each answer option is scored against the
-  question; a softmax over the options is the answer.
-- **Labels from the registers.** Norway's register interprets its own signing rules (rule codes),
-  Austria's court codes every person's power (alone / jointly); for joint powers a hand-written,
-  reviewed table of the register's standard wording names the partner. No synthetic examples and no
-  language-model labels in training.
-- **One representation for every register:** alternatives (OR) of groups (AND) of offices; every
-  answer is derived from it.
-- **Calibration:** one temperature per question type and Learn-then-Test thresholds per register,
-  fitted on validation data only; an unknown register gets the strictest combination.
-
-## Evaluation data
-
-| Set | Labels | Size |
-|---|---|---|
-| Register-labelled test parts | official codes (Norway interpreter, Austrian court codes) | thousands of texts, see the tables |
-| Reference sets (Austria, Norway, Denmark) | two different AI assistants answered independently; kept where both agree; human spot checks | 400 / 250 / 300 extracts |
-
-Hypotheses and decision rules were written down before the results were read; the release model was
-chosen by the project owner although one criterion (on the experimental ambiguity score) was not
-met. Both are documented in the [model card](model_card.md).
+The serving latency was measured with an earlier checkpoint of the same 4B architecture.
 
 ## Limitations and responsible use
 
-- **Not legal advice.** A register can be out of date, and articles of association can contain
-  powers the register text does not show. Keep a human in the loop for every binding decision.
-- **Per-person powers:** when holders of one office have different powers, the office-level question
-  ("can a managing director act alone?") is open by our convention; the model tends to answer "yes"
-  if any holder may act alone.
+- **Not legal advice.** A register can be out of date, and articles of association can grant
+  powers that the register text does not show. Keep a person in the loop for every binding
+  decision.
+- **Per-person powers:** sometimes holders of one office have different powers. The office-level
+  question ("can a managing director act alone?") is then open by our convention, and the model
+  tends to answer "yes" if any holder may act alone.
 - **Partnerships** (OG/KG) are the weakest Austrian structure.
-- **Denmark (beta):** *"direktionen"* is often read as a collective body, and the abstention
+- **Denmark (beta):** the model often reads *"direktionen"* as a collective body. The abstention
   thresholds do not transfer to a register the model has never seen.
-- The **ambiguity** score is experimental and never served as a decision.
-- There is **no fully human-verified evaluation subset**; the hard-case numbers are agreement with
-  the consensus of two AI assistants, spot-checked by a person.
+- The **ambiguity** score is experimental and is never served as a decision.
+- No evaluation subset has been **fully verified by a person**. The hard-case numbers measure
+  agreement with the consensus of two AI assistants, spot-checked by a person.
 
 ## Reproduce
 
-The data is public but not redistributed here. The scripts fetch it from the official sources
-(rate-limited, cached, descriptive User-Agent):
+The data is public, but this repository does not redistribute it. The scripts fetch it from the
+official sources, rate-limited and cached, with a descriptive User-Agent:
 
 | Register | Source | Licence | Script |
 |---|---|---|---|
@@ -223,14 +300,25 @@ The data is public but not redistributed here. The scripts fetch it from the off
 | Austria | Firmenbuch HVD via JustizOnline (API key) | CC BY 4.0 | `python -m signrule.ingest.ingest_at` |
 | Denmark | CVR system-til-system (user account) | Danish public-data terms | `python -m signrule.ingest.ingest_dk` |
 
-Then `make data && make data-check`, `python -m signrule.normalize.pipeline_at run && … check`,
-`python -m signrule.train.kev_wrapper train --config configs/train/4b-noat-v2.yaml` (≈ 15 h on one
-RTX 5090), `kev_wrapper bench`, and `eval/run_all.py`. The reference sets contain register texts and
-are not published; their agreement statistics are in `results/gold/`.
+<details>
+<summary><b>Pipeline commands</b></summary>
+
+```bash
+make data && make data-check                                   # Norway
+python -m signrule.normalize.pipeline_at run && python -m signrule.normalize.pipeline_at check
+python -m signrule.train.kev_wrapper train --config configs/train/4b-noat-v2.yaml   # ≈ 15 h, one RTX 5090
+python -m signrule.train.kev_wrapper bench --run runs/<name> --jurisdiction <j> --split <s> --part <p> --raw
+python eval/run_all.py --jurisdiction <j> --split random
+```
+
+</details>
+
+The reference sets contain register texts and are not published. Their agreement statistics are in
+`results/gold/`.
 
 ## Citation
 
-The paper:
+If you use SignRule-Decide, please cite the paper:
 
 ```bibtex
 @misc{ildan2026whomaysign,
@@ -244,7 +332,8 @@ The paper:
 }
 ```
 
-The code and model:
+<details>
+<summary>The code and model (software citation)</summary>
 
 ```bibtex
 @software{ildan2026signrule,
@@ -257,9 +346,15 @@ The code and model:
 }
 ```
 
+</details>
+
 ## Licence and attribution
 
-Code and model weights: Apache-2.0. Contains data from Brønnøysundregistrene (NLOD); Firmenbuch –
-Bundesministerium für Justiz / JustizOnline (HVD), CC BY 4.0; Det Centrale Virksomhedsregister
-(CVR), Erhvervsstyrelsen — "Indeholder data, som benyttes i henhold til vilkår for brug af danske
-offentlige data". No register data is redistributed. Built with the help of an AI coding assistant.
+Code and model weights are licensed under Apache-2.0. This project contains data from:
+
+- Brønnøysundregistrene (NLOD)
+- Firmenbuch – Bundesministerium für Justiz / JustizOnline (HVD), CC BY 4.0
+- Det Centrale Virksomhedsregister (CVR), Erhvervsstyrelsen: "Indeholder data, som benyttes i
+  henhold til vilkår for brug af danske offentlige data"
+
+No register data is redistributed. The project was built with the help of an AI coding assistant.

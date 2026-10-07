@@ -221,3 +221,19 @@ def test_ambiguity_is_experimental_and_always_abstains():
     assert out["ambiguity"]["abstain_reason"] == "experimental question (not a decision output)"
     assert "probabilities" in out["ambiguity"]  # the distribution is still returned
     assert out["ceo_alone"]["abstain"] is False
+
+
+def test_device_selection_and_load_options_per_platform():
+    assert app_mod.pick_device("auto", cuda=True, mps=False) == "cuda"
+    assert app_mod.pick_device("auto", cuda=False, mps=True) == "mps"
+    assert app_mod.pick_device("auto", cuda=False, mps=False) == "cpu"
+    assert app_mod.pick_device("cpu", cuda=True, mps=True) == "cpu"
+    import torch
+    from kev.checkpoint import LoadOptions
+
+    base = LoadOptions()
+    assert app_mod.serving_options("cuda", base).dtype == torch.bfloat16
+    assert app_mod.serving_options("mps", base).backend == "auto"  # MLX where it pays
+    assert app_mod.serving_options("cpu", base).dtype == torch.float32
+    explicit = LoadOptions(backend="torch")
+    assert app_mod.serving_options("mps", explicit).backend == "torch"  # a caller's choice wins
