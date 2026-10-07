@@ -178,6 +178,19 @@ The model never needs names: callers pass roles and counts; the reference server
 are passed anyway and abstains when a text still looks like it contains one. No register data,
 training data or gold annotations are distributed.
 
+## Citation
+
+```bibtex
+@software{ildan2026signrule,
+  author    = {Ildan, Ali},
+  title     = {SignRule-Decide: typed, calibrated decisions on company representation rules},
+  year      = {2026},
+  publisher = {Zenodo},
+  doi       = {10.5281/zenodo.23224891},
+  url       = {https://github.com/aliildan/signrule-decide}
+}
+```
+
 ## Attribution
 
 Contains data from Brønnøysundregistrene (NLOD); Firmenbuch – Bundesministerium für Justiz /

@@ -3,7 +3,7 @@
 **Who can sign for this company? Typed, calibrated answers from Austrian register extracts —
 locally, without sending data anywhere.**
 
-[Licence: Apache-2.0](LICENSE) · Python 3.12 · 4B parameters · one GPU · [open weights](https://huggingface.co/aildan/signrule-decide-4b)
+[Licence: Apache-2.0](LICENSE) · Python 3.12 · 4B parameters · one GPU · [open weights](https://huggingface.co/aildan/signrule-decide-4b) · [DOI 10.5281/zenodo.23224891](https://doi.org/10.5281/zenodo.23224891)
 
 ---
 
@@ -227,6 +227,19 @@ Then `make data && make data-check`, `python -m signrule.normalize.pipeline_at r
 `python -m signrule.train.kev_wrapper train --config configs/train/4b-noat-v2.yaml` (≈ 15 h on one
 RTX 5090), `kev_wrapper bench`, and `eval/run_all.py`. The reference sets contain register texts and
 are not published; their agreement statistics are in `results/gold/`.
+
+## Citation
+
+```bibtex
+@software{ildan2026signrule,
+  author    = {Ildan, Ali},
+  title     = {SignRule-Decide: typed, calibrated decisions on company representation rules},
+  year      = {2026},
+  publisher = {Zenodo},
+  doi       = {10.5281/zenodo.23224891},
+  url       = {https://github.com/aliildan/signrule-decide}
+}
+```
 
 ## Licence and attribution
 
