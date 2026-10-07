@@ -128,7 +128,7 @@ state = {
     "jurisdiction": "AT",
     "legal_form": "GmbH",
     "signature_rule": "Geschäftsführer [PERSON_1]: vertritt seit 01.03.2019 gemeinsam mit einem "
-                      "weiteren Geschäftsführer oder einem Prokuristen",
+    "weiteren Geschäftsführer oder einem Prokuristen",
     "roles": [{"role": "Geschäftsführer", "count": 2}, {"role": "Prokurist", "count": 1}],
 }
 r = httpx.post("http://localhost:8300/v1/systemone", json={"state": state, "questions": ask})
