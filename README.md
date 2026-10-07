@@ -115,7 +115,9 @@ uv run python server/app.py --run runs/signrule-decide-4b \
 ```
 
 Weights: [huggingface.co/aildan/signrule-decide-4b](https://huggingface.co/aildan/signrule-decide-4b).
-The model does not generate text, so it cannot run in Ollama or llama.cpp; use this server.
+Ollama (v0.35+) serves decision models over the same `/v1/systemone` API, for the Clef, Laya and
+Strands Decider architectures; this checkpoint is in Kev's format, which Ollama does not load yet,
+so use this server — the requests are the same.
 
 Ask questions with the canonical wordings from `configs/questions.yaml`:
 

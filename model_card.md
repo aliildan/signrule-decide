@@ -31,8 +31,9 @@ The base model `Qwen/Qwen3.5-4B-Base` is downloaded on first start. Files: `adap
 (LoRA), `head.pt` (pointer head, PyTorch state), `calibration/NO.json` and `calibration/AT.json`
 (temperatures and abstention thresholds fitted on each register's validation part), tokenizer and
 training configuration. Request format and examples: the GitHub README and `results/demo/demo-de.md`.
-The model cannot run in Ollama or llama.cpp: it does not generate text, its pointer head scores the
-answer options.
+Ollama (v0.35+) serves decision models over the same `/v1/systemone` API for the Clef, Laya and
+Strands Decider architectures; this checkpoint is in Kev's format, which Ollama does not load yet.
+Use the reference server; the requests are identical.
 
 ## Model details
 
