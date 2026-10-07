@@ -1,0 +1,26 @@
+{
+ "a": "no-9b-base",
+ "b": "enc_xlm-roberta-large",
+ "part": "test",
+ "split": "random",
+ "n_items": 5477,
+ "n_clusters": 254,
+ "mean_accuracy_diff": 0.014327094663187545,
+ "ci95": [
+  0.007319176917520426,
+  0.02388162832092661
+ ],
+ "a_beats_b": true,
+ "per_question_diff": {
+  "ambiguity": 0.03305785123966942,
+  "ceo_alone": 0.001834862385321101,
+  "ceo_with_one_board_member": 0.0017574692442882249,
+  "chair_alone": 0.008771929824561403,
+  "min_signers": 0.0483619344773791,
+  "parseable": 0.007633587786259542,
+  "prokura_joint": 0.002881844380403458,
+  "prokura_present": 0.007836990595611285,
+  "rule_type": 0.02586206896551724,
+  "two_board_members_jointly": 0.005272407732864675
+ }
+}

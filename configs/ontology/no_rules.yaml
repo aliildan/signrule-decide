@@ -1,0 +1,32 @@
+# Norway: Fullmakttjenesten combination codes -> canonical signing representation (design-02 §5).
+# Descriptions are the register's own texts (Fullmakt API docs §2.4); they also define
+# ambiguity level 0 (text equals the description of the matched rule).
+# Group syntax: a list of [ROLE, count] pairs (AND), or {collective: ALL_BOARD|ALL_PARTNERS}.
+# `alternatives` is a list of groups (OR).
+R0001: {kind: rule, description: "Styrets leder alene", alternatives: [[[CHAIR, 1]]]}
+R0002: {kind: rule, description: "Daglig leder alene", alternatives: [[[CEO, 1]]]}
+R0003: {kind: rule, description: "Styret i fellesskap", alternatives: [{collective: ALL_BOARD}]}
+R0004: {kind: rule, description: "Styrets leder og ett styremedlem i fellesskap", alternatives: [[[CHAIR, 1], [BOARD_MEMBER, 1]]]}
+R0005: {kind: rule, description: "To styremedlemmer i fellesskap", alternatives: [[[BOARD_MEMBER, 2]]]}
+R0006: {kind: rule, description: "Styrets medlemmer hver for seg", alternatives: [[[BOARD_MEMBER, 1]]]}
+R0007: {kind: rule, description: "Daglig leder eller styrets leder alene", alternatives: [[[CEO, 1]], [[CHAIR, 1]]]}
+R0008: {kind: rule, description: "Daglig leder og styrets leder i fellesskap", alternatives: [[[CEO, 1], [CHAIR, 1]]]}
+R0009: {kind: rule, description: "Deltakerne i fellesskap", alternatives: [{collective: ALL_PARTNERS}]}
+R0010: {kind: rule, description: "Deltakerne hver for seg", alternatives: [[[PARTNER, 1]]]}
+R0011: {kind: rule, description: "Styrets leder og nestleder hver for seg", alternatives: [[[CHAIR, 1]], [[DEPUTY_CHAIR, 1]]]}
+R0012: {kind: rule, description: "Styrets leder alene eller to styremedlemmer i fellesskap", alternatives: [[[CHAIR, 1]], [[BOARD_MEMBER, 2]]]}
+R0013: {kind: rule, description: "Daglig leder alene eller styrets medlemmer hver for seg", alternatives: [[[CEO, 1]], [[BOARD_MEMBER, 1]]]}
+R0014: {kind: rule, description: "Daglig leder og ett styremedlem i fellesskap", alternatives: [[[CEO, 1], [BOARD_MEMBER, 1]]]}
+R0015: {kind: rule, description: "Styrets leder og nestleder i fellesskap", alternatives: [[[CHAIR, 1], [DEPUTY_CHAIR, 1]]]}
+R0016: {kind: rule, description: "Tre styremedlemmer i fellesskap", alternatives: [[[BOARD_MEMBER, 3]]]}
+R0017: {kind: rule, description: "Styrets leder og to styremedlemmer i fellesskap", alternatives: [[[CHAIR, 1], [BOARD_MEMBER, 2]]]}
+R0018: {kind: rule, description: "Nestleder og ett styremedlem i fellesskap", alternatives: [[[DEPUTY_CHAIR, 1], [BOARD_MEMBER, 1]]]}
+STYR: {kind: statutory, description: "Styret i fellesskap", alternatives: [{collective: ALL_BOARD}]}
+DELT: {kind: statutory, description: "Deltakerne hver for seg", alternatives: [[[PARTNER, 1]]]}
+INNH: {kind: statutory, description: "Innehaver", alternatives: [[[OTHER, 1]]]}
+SIGN: {kind: person, description: "Signatur", mode: sole}
+SIHV: {kind: person, description: "Signatur hver for seg", mode: sole}
+SIFE: {kind: person, description: "Signatur i fellesskap", mode: joint}
+PROK: {kind: procuration, description: "Prokura", mode: sole}
+POHV: {kind: procuration, description: "Prokura hver for seg", mode: sole}
+POFE: {kind: procuration, description: "Prokura i fellesskap", mode: joint}

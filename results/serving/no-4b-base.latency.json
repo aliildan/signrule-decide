@@ -1,0 +1,23 @@
+{
+ "model": "no-4b-base",
+ "runs": [
+  {
+   "concurrency": 1,
+   "n_requests": 200,
+   "questions_per_request": 8.48,
+   "p50_ms": 159.7907990217209,
+   "p95_ms": 174.5738819881808,
+   "mean_ms": 149.77009436421213,
+   "throughput_rps": 6.676456175201678
+  },
+  {
+   "concurrency": 4,
+   "n_requests": 200,
+   "questions_per_request": 8.48,
+   "p50_ms": 612.799291004194,
+   "p95_ms": 662.3218540044036,
+   "mean_ms": 592.3810762896028,
+   "throughput_rps": 6.72530221927451
+  }
+ ]
+}

@@ -1,0 +1,50 @@
+{
+ "n_items": 300,
+ "per_question": {
+  "rule_type": {
+   "n": 290,
+   "agreement": 1.0,
+   "kappa": 1.0
+  },
+  "min_signers": {
+   "n": 296,
+   "agreement": 0.9966216216216216,
+   "kappa": 0.993872650492672
+  },
+  "ceo_alone": {
+   "n": 281,
+   "agreement": 1.0,
+   "kappa": 1.0
+  },
+  "chair_alone": {
+   "n": 283,
+   "agreement": 1.0,
+   "kappa": 1.0
+  },
+  "two_board_members_jointly": {
+   "n": 281,
+   "agreement": 1.0,
+   "kappa": 1.0
+  },
+  "ceo_with_one_board_member": {
+   "n": 281,
+   "agreement": 0.99644128113879,
+   "kappa": 0.9928211940832333
+  },
+  "prokura_present": {
+   "n": 300,
+   "agreement": 1.0,
+   "kappa": 1.0
+  },
+  "parseable": {
+   "n": 300,
+   "agreement": 1.0,
+   "kappa": 1.0
+  },
+  "ambiguity": {
+   "n": 300,
+   "agreement": 0.9133333333333333,
+   "kappa": 0.8940217391304348
+  }
+ }
+}

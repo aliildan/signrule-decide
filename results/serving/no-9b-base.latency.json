@@ -1,0 +1,32 @@
+{
+ "model": "no-9b-base",
+ "runs": [
+  {
+   "concurrency": 1,
+   "n_requests": 200,
+   "questions_per_request": 8.48,
+   "p50_ms": 227.099559007911,
+   "p95_ms": 248.09514402295463,
+   "mean_ms": 212.94894855484017,
+   "throughput_rps": 4.6957257082711115
+  },
+  {
+   "concurrency": 4,
+   "n_requests": 200,
+   "questions_per_request": 8.48,
+   "p50_ms": 886.4899819891434,
+   "p95_ms": 952.1554699749686,
+   "mean_ms": 846.1741254453955,
+   "throughput_rps": 4.708033701014868
+  },
+  {
+   "concurrency": 8,
+   "n_requests": 200,
+   "questions_per_request": 8.48,
+   "p50_ms": 1683.9045410160907,
+   "p95_ms": 1879.3491760152392,
+   "mean_ms": 1685.0310029894172,
+   "throughput_rps": 4.72429315636298
+  }
+ ]
+}

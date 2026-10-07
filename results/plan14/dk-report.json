@@ -1,0 +1,35 @@
+{
+ "noat-4b-v2": {
+  "calibration": [
+   "at",
+   "no"
+  ],
+  "policy_merge": "strictest",
+  "coalition_mean": 0.9251040221914009,
+  "coalition_items": 2163,
+  "min_signers": 0.864406779661017,
+  "min_signers_items": 295,
+  "rule_type": 0.6241379310344828,
+  "alpha_5pct": {
+   "coverage": 0.9942020982882386,
+   "risk": 0.14301582893640655,
+   "answered": 3601
+  },
+  "company_weighted": {
+   "coalition_mean": 0.9112180242698137,
+   "min_signers": 0.8525351929764899
+  },
+  "by_wording": {
+   "dk-standard": {
+    "coalition_mean": 0.9212707182320442,
+    "min_signers": 0.8367346938775511
+   },
+   "dk-tail": {
+    "coalition_mean": 0.9270326615705351,
+    "min_signers": 0.8781725888324873
+   }
+  },
+  "H17": true,
+  "H18": false
+ }
+}

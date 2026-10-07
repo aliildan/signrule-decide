@@ -1,0 +1,10 @@
+{
+  "_fixture": true,
+  "enhet": {"organisasjonsnummer": "999000001", "navn": "FIXTURE EKSEMPEL AS", "organisasjonsform": {"kode": "AS"}},
+  "signeringsGrunnlag": {"kode": "SI", "tekstforklaring": "Signeringsgrunnlag finnes ikke"},
+  "status": {
+    "kombinasjonStatus": {"kode": "IK"},
+    "regelStatus": {"kode": "RI", "tekstforklaring": "Regel ikke registrert"},
+    "rutineStatus": {"kode": "OK"}
+  }
+}

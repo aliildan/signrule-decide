@@ -1,0 +1,52 @@
+# Capitalised words that are legal/role vocabulary, not names (residual-name detector, plan-03 T4).
+# Lower-case; matched case-insensitively. Extend from aggregate token counts, never from records.
+"NO": [
+  daglig, leder, lederen, styrets, styret, styre, styreleder, styrelederen, styremedlem, styremedlemmer,
+  styremedlemmene, medlem, medlemmer, medlemmene, nestleder, nestlederen, varamedlem, signatur, signaturen,
+  signaturrett, prokura, prokuristen, prokurist, prokurister, fellesskap, hver, for, seg, alene, eller, og,
+  to, tre, fire, ett, en, et, av, i, med, sammen, selskapet, selskapets, foretaket, foretakets, firmaet,
+  firma, firmaets, tegnes, tegner, tegningsrett, deltakerne, deltaker, deltakere, komplementar,
+  komplementaren, kommandittist, administrerende, direktør, direktøren, adm, dir, ceo, chairman, the,
+  board, of, directors, and, jointly, alone, two, members, member, chair, managing, director, daglige,
+  ledere, generalforsamlingen, styrets, leder, nestlederen, kasserer, sekretær, sekretæren, kassereren,
+  formann, formannen, nestformann, styreformann, styreformannen, gruppe, gruppen, sameiet, sameie,
+  borettslaget, foreningen, stiftelsen, laget, klubben, rådet, hele, samlet, samlede, minst, inntil,
+  over, under, kr, nok, beløp, beløpsgrense, også, kan, skal, ved, til, om, på, fra, den, de, det,
+  denne, dette, disse, enten, eventuelt, alle, samtlige, øvrige, andre, annen, nr, jf, iht, signere,
+  signerer, binde, binder, forplikte, forplikter,
+  # Nynorsk (written by hand)
+  dagleg, leiar, leiaren, styreleiar, styreleiaren, nestleiar, styremedlemmer, åleine, saman,
+  kvar, eitt, ein, styremedlemene, medlemene, selskapet, signaturrett, prokura, styret, styrets
+]
+# Austria: words from `normalize_at vocab --min 3` (all 19 reviewed: legal terms, no names) plus the
+# role labels of roles.yaml "AT" and standard terms of §§ 18 GmbHG, 71 AktG, 48-50 UGB, written by hand.
+"AT": [
+  geschäftsführer, geschäftsführerin, geschäftsführern, geschäftsführers, geschäftsleiter,
+  geschäftsleiterin, prokurist, prokuristin, prokuristen, prokuristinnen, gesamtprokurist,
+  gesamtprokuristin, gesamtprokuristen, einzelprokurist, einzelprokura, gesamtprokura, prokura,
+  vorstand, vorstands, vorstandes, vorstandsmitglied, vorstandsmitglieder, vorstandsmitgliedern,
+  vorsitzende, vorsitzender, vorsitzenden, vorstandsvorsitzende, vorstandsvorsitzender, stellvertreter,
+  stellvertreterin, stellvertretendes, vorstandsmitgliedes, obmann, obfrau, obmannstellvertreter,
+  obfraustellvertreterin, obmann-stellvertreter, aufsichtsrat, aufsichtsrats, aufsichtsrates,
+  gesellschafter, gesellschafterin, gesellschaftern, komplementär, komplementärin, kommanditist,
+  kommanditistin, abwickler, abwicklerin, liquidator, liquidatorin, masseverwalter, masseverwalterin,
+  vertreter, vertreterin, mitglied, mitglieder, mitgliedern, firma, gesellschaft, zweigniederlassung,
+  zweigniederlassungen, grundstücken, grundstück, grundstücke, veräusserung, veräußerung, belastung,
+  berechtigung, befugnis, ermächtigung, vertretung, vertretungsbefugnis, einzelvertretung,
+  gesamtvertretung, abs, ugb, gmbhg, aktg, eur, euro, betrag, beträge, rechtsgeschäfte, geschäfte,
+  zustimmung, generalversammlung, beschluss, herr, herrn, frau, gmbh, ag, kg, og, flexkapg
+]
+# Denmark: written by hand from selskabsloven §§ 135-136 wording and the CVR role labels; extended
+# only from `normalize_dk vocab` (capitalised words in >= 20 companies' texts, reviewed).
+"DK": [
+  selskabet, selskabets, virksomheden, virksomhedens, foreningen, fonden, partnerselskabet,
+  kommanditselskabet, interessentskabet, andelsselskabet, tegnes, tegner, tegningsret, af, en, én, et,
+  to, tre, fire, fem, direktør, direktøren, direktører, direktørerne, direktion, direktionen,
+  direktionens, administrerende, adm, dir, samlede, samlet, bestyrelse, bestyrelsen, bestyrelsens,
+  bestyrelsesmedlem, bestyrelsesmedlemmer, bestyrelsesmedlemmerne, medlem, medlemmer, medlemmerne,
+  formand, formanden, formandens, næstformand, næstformanden, suppleant, i, forening, med, eller, og,
+  alene, hver, for, sig, sammen, den, de, det, samtlige, alle, interessent, interessenter,
+  interessenterne, komplementar, komplementaren, komplementarer, kommanditist, prokura, prokurist,
+  prokuristen, prokurister, filialbestyrer, filialbestyreren, filialbestyrere, uddeler, uddeleren,
+  tilsynsråd, tilsynsrådet, generalforsamlingen, aps, ivs, amba, fmba, smba, holding
+]

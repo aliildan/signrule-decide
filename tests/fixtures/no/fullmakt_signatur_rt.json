@@ -1,0 +1,17 @@
+{
+  "_fixture": true,
+  "enhet": {"organisasjonsnummer": "999000002", "navn": "FIXTURE UKLAR AS", "organisasjonsform": {"kode": "AS"}},
+  "signeringsGrunnlag": {
+    "kode": "SF",
+    "signaturProkuraRoller": {
+      "personRolleGrunnlag": [],
+      "signaturProkuraFritekst": "Styrets leder sammen med ett styremedlem, men bare for avtaler under en fiktiv grense."
+    }
+  },
+  "signeringsKombinasjon": {"kombinasjon": []},
+  "status": {
+    "kombinasjonStatus": {"kode": "IK", "tekstforklaring": "Kombinasjon kan ikke hentes eller finnes ikke"},
+    "regelStatus": {"kode": "RT", "tekstforklaring": "Regel kan ikke tolkes"},
+    "rutineStatus": {"kode": "OK", "tekstforklaring": "Maskinelt oppslag utført uten feil"}
+  }
+}

@@ -1,0 +1,12 @@
+# Norway: organisation forms fetched from Fullmakttjenesten, in priority order (tier 1 first).
+#
+# Exempt by the register itself (Fullmakt API docs §5, no lookup possible):
+#   EOFG FKF KF SÆR NUF PRE BEDR AAFY ADOS BO FYLK IKJP KBO KOMM KTRF PERS VPFO TVAM UTLA OPMV
+# Excluded by us: ENK (sole proprietorship, the entity *is* a person; CLAUDE.md §6 step 3).
+# Anything not listed under `tiers` is skipped.
+tiers:
+  1: [AS, ASA]
+  2: [ANS, DA, KS, SA, SE, SPA, STI, IKS, SF, GFS, ESEK, PK, BA]
+  3: [BRL, BBL, FLI]
+exempt: [EOFG, FKF, KF, SÆR, NUF, PRE, BEDR, AAFY, ADOS, BO, FYLK, IKJP, KBO, KOMM, KTRF, PERS, VPFO, TVAM, UTLA, OPMV]
+excluded: [ENK]

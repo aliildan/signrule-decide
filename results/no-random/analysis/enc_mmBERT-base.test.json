@@ -1,0 +1,98 @@
+{
+ "model": "enc_mmBERT-base",
+ "split": "random",
+ "part": "test",
+ "n_items": 5477,
+ "rule_type_confusion": {
+  "board_jointly": {
+   "board_jointly": 19,
+   "no_rule_registered": 2
+  },
+  "joint_role_combo": {
+   "joint_role_combo": 26,
+   "joint_two_specific": 1,
+   "no_rule_registered": 1
+  },
+  "joint_three_plus": {
+   "no_rule_registered": 7,
+   "joint_three_plus": 4
+  },
+  "joint_two_any": {
+   "joint_two_any": 44
+  },
+  "joint_two_specific": {
+   "joint_two_specific": 7
+  },
+  "mixed_alternatives": {
+   "mixed_alternatives": 18,
+   "no_rule_registered": 1
+  },
+  "no_rule_registered": {
+   "no_rule_registered": 208,
+   "joint_two_any": 1,
+   "mixed_alternatives": 1,
+   "board_jointly": 3,
+   "joint_role_combo": 2,
+   "sole_chair": 1,
+   "sole_specific_roles": 1
+  },
+  "sole_any_board_member": {
+   "sole_any_board_member": 86
+  },
+  "sole_ceo": {
+   "sole_ceo": 7
+  },
+  "sole_chair": {
+   "sole_chair": 41
+  },
+  "sole_specific_roles": {
+   "sole_specific_roles": 99
+  }
+ },
+ "accuracy_by_text_length": {
+  "<160": {
+   "n": 1334,
+   "accuracy": 0.9842578710644677
+  },
+  "<20": {
+   "n": 8,
+   "accuracy": 1.0
+  },
+  "<40": {
+   "n": 1193,
+   "accuracy": 0.9899413243922883
+  },
+  "<80": {
+   "n": 2702,
+   "accuracy": 0.9900074019245003
+  },
+  ">=160": {
+   "n": 119,
+   "accuracy": 0.9915966386554622
+  },
+  "none": {
+   "n": 121,
+   "accuracy": 0.9834710743801653
+  }
+ },
+ "accuracy_by_legal_form": {
+  "AS": {
+   "n": 5468,
+   "accuracy": 0.988478419897586
+  },
+  "ASA": {
+   "n": 9,
+   "accuracy": 1.0
+  }
+ },
+ "errors_by_question": {
+  "min_signers": 12,
+  "prokura_present": 15,
+  "rule_type": 21,
+  "ceo_with_one_board_member": 1,
+  "parseable": 6,
+  "two_board_members_jointly": 3,
+  "chair_alone": 4,
+  "ceo_alone": 1
+ }
+}

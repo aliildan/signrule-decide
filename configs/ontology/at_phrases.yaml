@@ -1,0 +1,70 @@
+# Austrian joint-representation partner phrases -> CIR partner role (plan-12, owner decision
+# 2026-10-06: rule-derived "silver" structure labels, CLAUDE.md §2.1 exception).
+#
+# A representing function coded G ("gemeinsame Vertretung") whose text reads
+#   "vertritt seit <date> gemeinsam mit <partner> [oder <partner> …]"
+# gets one AND-group per partner: {holder's office: 1, partner role: 1} ("weiteren", "zweiten",
+# "anderen" only say the partner is another person; groups always count distinct people).
+# Every partner phrase must match an entry EXACTLY after normalisation (lower case, single spaces,
+# no trailing punctuation, leading "gemeinsam mit"/"mit" removed); otherwise the company gets no
+# structure labels. Entries were written by hand from the partner phrases shared by >= 20 companies
+# (aggregate of 2026-10-06, 89 % of all partner-phrase uses), reviewed, never generated. Named
+# partners ("Person A", [PERSON_n]) are never in the table (person-specific -> no label).
+CEO:
+  - einem geschäftsführer
+  - einem/einer geschäftsführer/in
+  - einer geschäftsführerin/einem geschäftsführer
+  - einem weiteren geschäftsführer
+  - einem/einer weiteren geschäftsführer/in
+  - einer/einem weiteren geschäftsführer/in
+  - einem/r weiteren geschäftsführer/in
+  - einem weiteren geschäftsführer/in
+  - einer weiteren geschäftsführerin/einem weiteren geschäftsführer
+  - einem weiteren geschäftsführer/einer weiteren geschäftsführerin
+  - einem/einer weiteren geschäftsführer/geschäftsführerin
+  - einer/einem weiteren geschäftsführerin/geschäftsführer
+  - einem zweiten geschäftsführer
+  - einem/einer zweiten geschäftsführer/in
+  - einem anderen geschäftsführer
+  - einem weiteren geschäftsleiter
+  - einem/einer weiteren geschäftsleiter/in
+  - einem/einer zweiten geschäftsleiter/in
+PROKURIST:
+  - einem prokuristen
+  - prokuristen
+  - einer/einem prokuristin/prokuristen
+  - einem/einer prokuristen/prokuristin
+  - einer prokuristin/einem prokuristen
+  - einem prokuristen/einer prokuristin
+  - einem/einer prokuristen/in
+  - einem/r prokuristen/in
+  - prokuristen/prokuristin
+  - prokuristen/in
+  - einem gesamtprokuristen
+  - gesamtprokuristen
+  - einer/einem gesamtprokuristin/gesamtprokuristen
+  - einer/einem gesamtprokuristin/-prokuristen
+  - einer gesamtprokuristin/einem gesamtprokuristen
+  - einem/einer gesamtprokuristen/gesamtprokuristin
+BOARD_MEMBER:
+  - einem vorstandsmitglied
+  - einem weiteren vorstandsmitglied
+  - einem zweiten vorstandsmitglied
+  - einer vorständin/einem vorstand
+PARTNER:
+  - einem weiteren unbeschränkt haftenden gesellschafter
+  - einem/einer weiteren unbeschränkt haftenden gesellschafter/in
+CHAIR:
+  - dem obmann
+  - der/dem obfrau/obmann
+  - dem/der obmann/obfrau
+DEPUTY_CHAIR:
+  - dem obmannstellvertreter
+  - einem obmannstellvertreter
+  - obmannstellvertreter
+  - dem/der obfrau-/obmannstellvertreter/in
+  - der/dem obfrau-/obmannstellvertreter/in
+  - einer/einem obfrau-/obmannstellvertreter/in
+  - einem/einer obfrau-/obmannstellvertreter/in
+  - der/dem obfrau/obmannstellvertreter/in
+  - dem/der obfrau/obmannstellvertreter/in

@@ -1,0 +1,26 @@
+{
+ "a": "no-9b-base",
+ "b": "kev-9b-zeroshot",
+ "part": "test",
+ "split": "random",
+ "n_items": 5477,
+ "n_clusters": 254,
+ "mean_accuracy_diff": 0.40658451849372346,
+ "ci95": [
+  0.373300458655531,
+  0.443809135647343
+ ],
+ "a_beats_b": true,
+ "per_question_diff": {
+  "ambiguity": 0.6308539944903582,
+  "ceo_alone": 0.5174311926605505,
+  "ceo_with_one_board_member": 0.6291739894551845,
+  "chair_alone": 0.40350877192982454,
+  "min_signers": 0.6177847113884556,
+  "parseable": 0.01984732824427481,
+  "prokura_joint": 0.005763688760806916,
+  "prokura_present": 0.10188087774294671,
+  "rule_type": 0.6879310344827586,
+  "two_board_members_jointly": 0.45166959578207383
+ }
+}

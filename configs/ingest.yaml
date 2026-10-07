@@ -1,0 +1,4 @@
+# Shared ingest settings (CLAUDE.md §2.7). Every register sees this User-Agent.
+user_agent: "signrule-decide/0.1 (non-commercial open-source research; https://github.com/aliildan)"
+max_rps: 5.0        # hard ceiling; the client refuses anything above 5 req/s
+max_retries: 6

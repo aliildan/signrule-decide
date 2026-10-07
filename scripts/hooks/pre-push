@@ -1,0 +1,19 @@
+#!/bin/sh
+# The public `main` branch is only updated by the explicit publish step (CLAUDE.md §10).
+# Usage for that step: SIGNRULE_PUBLISH=1 git push <public-remote> main
+# Every pushed commit is also tested the way CI sees it (committed files only, no private docs/
+# or data/): scripts/ci_local.sh. Skip in an emergency with SIGNRULE_SKIP_CI_LOCAL=1.
+while read -r local_ref local_sha remote_ref remote_sha; do
+  if [ "$remote_ref" = "refs/heads/main" ] && [ "${SIGNRULE_PUBLISH:-0}" != "1" ]; then
+    echo "pre-push: refusing to push to main outside the publish step (set SIGNRULE_PUBLISH=1)." >&2
+    exit 1
+  fi
+  if [ "$local_sha" != "0000000000000000000000000000000000000000" ] && [ "${SIGNRULE_SKIP_CI_LOCAL:-0}" != "1" ]; then
+    if ! "$(git rev-parse --show-toplevel)/scripts/ci_local.sh" "$local_sha" >/tmp/signrule-ci-local.log 2>&1; then
+      echo "pre-push: tests fail on the committed tree (as CI would see it); see /tmp/signrule-ci-local.log" >&2
+      tail -5 /tmp/signrule-ci-local.log >&2
+      exit 1
+    fi
+  fi
+done
+exit 0

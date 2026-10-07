@@ -1,0 +1,93 @@
+# Canonical question wording (design-02 §3). "Criteria are the prompt": this text is part of the
+# model. Changing any of it requires retraining and re-running every baseline.
+rule_type:
+  type: choice
+  instructions: "Which signing-rule pattern does the registered rule describe?"
+  criteria:
+    sole_ceo: "The managing director (CEO) alone can bind the company"
+    sole_chair: "The chair of the board alone can bind the company"
+    sole_any_board_member: "Any single board member (or partner) alone can bind the company"
+    sole_specific_roles: "Any one of several specific office holders can bind the company alone"
+    joint_two_any: "Any two board members (or partners) jointly"
+    joint_two_specific: "Two specific office holders jointly, e.g. CEO and chair"
+    joint_role_combo: "A specific office holder together with one or more other board members"
+    joint_three_plus: "Three or more board members jointly"
+    board_jointly: "The whole board (or all partners) jointly"
+    mixed_alternatives: "Alternatives that mix sole and joint signing, e.g. chair alone or two members jointly"
+    joint_alternatives: "Several alternative groups that all need two or more people, e.g. CEO and chair jointly or two board members jointly"
+    prokura_only_rule: "Only holders of procuration (prokura)"
+    no_rule_registered: "No signing rule is registered; the statutory default applies"
+    other_unmapped: "A rule that fits none of the other patterns"
+min_signers:
+  type: choice
+  instructions: "What is the smallest number of people who can bind the company together?"
+  criteria:
+    "1": "One person can bind the company alone"
+    "2": "At least two people are needed"
+    "3+": "At least three people are needed"
+    all_board: "The whole board (or all partners) must act together"
+ceo_alone:
+  type: noul
+  instructions: "Can the managing director (CEO), by virtue of that office, bind the company alone?"
+chair_alone:
+  type: noul
+  instructions: "Can the chair of the board, by virtue of that office, bind the company alone?"
+two_board_members_jointly:
+  type: noul
+  instructions: "Can any two ordinary board members together bind the company?"
+ceo_with_one_board_member:
+  type: noul
+  instructions: "Can the managing director (CEO) together with one board member bind the company?"
+# Coalition questions (design-04, plan-12): yes if these office holders, acting together by virtue
+# of their offices, can bind the company. "Member" = an ordinary member of the company's board,
+# partnership or executive board.
+member_alone:
+  type: noul
+  instructions: "Can any single ordinary member of the board (or partner, or executive-board member) bind the company alone?"
+two_ceos:
+  type: noul
+  instructions: "Can two managing directors together bind the company?"
+ceo_with_chair:
+  type: noul
+  instructions: "Can the managing director (CEO) together with the chair of the board bind the company?"
+ceo_with_prokurist:
+  type: noul
+  instructions: "Under the signing rule (representation by the managing bodies, not by procuration), can a managing director together with a holder of procuration (Prokurist) bind the company?"
+chair_with_member:
+  type: noul
+  instructions: "Can the chair of the board together with one other board member bind the company?"
+three_members:
+  type: noul
+  instructions: "Can any three ordinary board members (or partners, or executive-board members) together bind the company?"
+prokurist_alone:
+  type: noul
+  instructions: "Can a single holder of procuration (Prokurist) bind the company alone under the signing rule?"
+two_prokurists:
+  type: noul
+  instructions: "Can two holders of procuration (Prokuristen) together bind the company under the signing rule?"
+chair_with_deputy:
+  type: noul
+  instructions: "Can the chair of the board together with the deputy chair bind the company?"
+deputy_with_member:
+  type: noul
+  instructions: "Can the deputy chair together with one other board member bind the company?"
+ceo_with_two_members:
+  type: noul
+  instructions: "Can the managing director (CEO) together with two board members bind the company?"
+prokura_present:
+  type: noul
+  instructions: "Is a power of procuration (prokura) registered for the company?"
+prokura_joint:
+  type: noul
+  instructions: "Must the procuration (prokura) be exercised jointly by more than one person?"
+parseable:
+  type: noul
+  instructions: "Can the registered signing rule be reduced to a definite rule?"
+ambiguity:
+  type: score
+  instructions: "How ambiguous is the registered signing-rule text?"
+  criteria:
+    - "Unambiguous standard phrase"
+    - "Standard rule with additional wording or conditions"
+    - "Unusual wording but decidable"
+    - "Cannot be decided from the text"

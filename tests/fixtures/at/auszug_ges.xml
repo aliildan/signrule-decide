@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- _fixture: fictitious Firmenbuch HVD Kurzinformation response for unit tests. Not real data;
+     Structure as observed in real responses (VART E/G + TEXT + TXTVERTR); all values invented. -->
+<env:Envelope xmlns:env="http://www.w3.org/2003/05/soap-envelope">
+  <env:Header/>
+  <env:Body>
+    <ns6:AUSZUG_V2_RESPONSE xmlns:ns6="ns://firmenbuch.justiz.gv.at/Abfrage/v2/AuszugResponse" ns6:FNR="999999x" ns6:UMFANG="Kurzinformation" ns6:STICHTAG="2026-01-01">
+      <ns6:FIRMA>
+        <ns6:FI_DKZ02 ns6:AUFRECHT="true" ns6:VNR="001">
+          <ns6:BEZEICHNUNG>Fixture Beispiel GmbH</ns6:BEZEICHNUNG>
+        </ns6:FI_DKZ02>
+        <ns6:FI_DKZ07 ns6:AUFRECHT="true" ns6:VNR="001">
+          <ns6:RECHTSFORM><ns6:CODE>GES</ns6:CODE><ns6:TEXT>Gesellschaft mit beschränkter Haftung</ns6:TEXT></ns6:RECHTSFORM>
+        </ns6:FI_DKZ07>
+      </ns6:FIRMA>
+      <ns6:FUN ns6:PNR="A" ns6:FKEN="GF" ns6:FKENTEXT="GESCHÄFTSFÜHRER/IN (handelsrechtlich)">
+        <ns6:FU_DKZ10 ns6:AUFRECHT="true" ns6:VNR="002">
+          <ns6:DATVON>2020-01-01</ns6:DATVON>
+          <ns6:VART><ns6:CODE>E</ns6:CODE><ns6:TEXT>Einzelvertretung</ns6:TEXT></ns6:VART>
+          <ns6:TEXT>vertritt seit 01.01.2020 selbständig</ns6:TEXT>
+        </ns6:FU_DKZ10>
+      </ns6:FUN>
+      <ns6:FUN ns6:PNR="B" ns6:FKEN="PR" ns6:FKENTEXT="PROKURIST/IN">
+        <ns6:FU_DKZ10 ns6:AUFRECHT="true" ns6:VNR="003">
+          <ns6:DATVON>2021-06-01</ns6:DATVON>
+          <ns6:VART><ns6:CODE>G</ns6:CODE><ns6:TEXT>gemeinsame Vertretung</ns6:TEXT></ns6:VART>
+          <ns6:TEXT>vertritt seit 01.06.2021 gemeinsam mit</ns6:TEXT>
+          <ns6:TEXT>einem Geschäfts-</ns6:TEXT>
+          <ns6:TEXT>führer oder Fixture Person A</ns6:TEXT>
+          <ns6:TXTVERTR>einem Geschäfts-</ns6:TXTVERTR>
+          <ns6:TXTVERTR>führer oder Fixture Person A</ns6:TXTVERTR>
+        </ns6:FU_DKZ10>
+      </ns6:FUN>
+      <ns6:FUN ns6:PNR="C" ns6:FKEN="GF" ns6:FKENTEXT="GESCHÄFTSFÜHRER/IN (handelsrechtlich)">
+        <ns6:FU_DKZ10 ns6:AUFRECHT="false" ns6:VNR="004">
+          <ns6:DATVON>2015-01-01</ns6:DATVON>
+          <ns6:DATBIS>2019-12-31</ns6:DATBIS>
+          <ns6:VART><ns6:CODE>E</ns6:CODE><ns6:TEXT>Einzelvertretung</ns6:TEXT></ns6:VART>
+        </ns6:FU_DKZ10>
+      </ns6:FUN>
+      <ns6:PER ns6:PNR="A">
+        <ns6:PE_DKZ02 ns6:AUFRECHT="true" ns6:VNR="002">
+          <ns6:VORNAME>Fixture</ns6:VORNAME>
+          <ns6:NACHNAME>Person A</ns6:NACHNAME>
+          <ns6:GEBURTSDATUM>FIXTURE-DATE</ns6:GEBURTSDATUM>
+        </ns6:PE_DKZ02>
+        <ns6:PE_DKZ03 ns6:AUFRECHT="true" ns6:VNR="002">
+          <ns6:STELLE>Fiktivgasse 1</ns6:STELLE>
+          <ns6:ORT>Fiktivstadt</ns6:ORT>
+        </ns6:PE_DKZ03>
+      </ns6:PER>
+      <ns6:PER ns6:PNR="B">
+        <ns6:PE_DKZ02 ns6:AUFRECHT="true" ns6:VNR="003">
+          <ns6:NACHNAME>Fixture Person B</ns6:NACHNAME>
+        </ns6:PE_DKZ02>
+      </ns6:PER>
+    </ns6:AUSZUG_V2_RESPONSE>
+  </env:Body>
+</env:Envelope>

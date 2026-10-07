@@ -1,0 +1,7 @@
+{
+  "_fixture": true,
+  "enhet": {"organisasjonsnummer": "999000003", "navn": "FIXTURE UNNTATT", "organisasjonsform": {"kode": "NUF"}},
+  "status": {
+    "rutineStatus": {"kode": "NA", "tekstforklaring": "Unntak for organisasjonsform: NUF"}
+  }
+}

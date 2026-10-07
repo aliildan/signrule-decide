@@ -1,0 +1,29 @@
+{
+ "hardware": {
+  "gpu": {
+   "name": "NVIDIA GeForce RTX 5090",
+   "memory_gb": 31.8,
+   "count": 1
+  },
+  "cpu": "Intel(R) Core(TM) i9-14900KF",
+  "ram_gb": 92
+ },
+ "training": {
+  "run": "noat-4b-v2",
+  "wall_hours": 14.6,
+  "peak_gpu_memory_gb": 20.2,
+  "records_seen": 62674,
+  "optimizer_steps": 7836,
+  "forward_tokens": 37665490,
+  "precision": "bf16",
+  "weights": "lora"
+ },
+ "serving": {
+  "measured_with": "no-4b-base",
+  "note": "same 4B architecture, Norwegian requests",
+  "questions_per_request": 8.48,
+  "p50_ms": 160,
+  "p95_ms": 175,
+  "throughput_rps": 6.7
+ }
+}

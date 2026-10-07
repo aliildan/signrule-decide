@@ -1,0 +1,18 @@
+#!/bin/sh
+# 1) Block commits that contain private paths, data files, secrets or personal data (CLAUDE.md §2).
+# 2) Run the same Ruff checks as CI on staged Python files, so CI doesn't fail on lint/format.
+ROOT="$(git rev-parse --show-toplevel)"
+python3 "$ROOT/scripts/publish_check.py" --staged || exit 1
+
+PY_FILES=$(git diff --cached --name-only --diff-filter=ACMR -- '*.py')
+if [ -n "$PY_FILES" ]; then
+  if command -v uv >/dev/null 2>&1; then
+    # shellcheck disable=SC2086
+    (cd "$ROOT" && uv run --no-sync ruff check $PY_FILES && uv run --no-sync ruff format --check $PY_FILES) || {
+      echo "pre-commit: ruff failed; run 'uv run ruff format . && uv run ruff check --fix .'" >&2
+      exit 1
+    }
+  else
+    echo "pre-commit: uv not found, skipping ruff (CI will still check)" >&2
+  fi
+fi

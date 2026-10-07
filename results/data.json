@@ -1,0 +1,33 @@
+{
+ "NO": {
+  "entities_read": 637492,
+  "api_responses": 1274984,
+  "entities_kept": 597487,
+  "unique_groups": 31583,
+  "train": 25394,
+  "val": 2729,
+  "test": 3460
+ },
+ "AT": {
+  "extracts_read": 239474,
+  "companies_kept": 206553,
+  "unique_patterns": 7710,
+  "train": 6197,
+  "val": 744,
+  "test": 769,
+  "pilot": 2500
+ },
+ "DK": {
+  "companies_read": 143646,
+  "companies_kept": 143311,
+  "unique_texts": 14147
+ },
+ "training": {
+  "run": "noat-4b-v2",
+  "training_cases": 31591,
+  "cases_per_epoch": 31337,
+  "epochs": 2,
+  "forward_tokens": 37665490
+ },
+ "total_companies_read": 1020612
+}

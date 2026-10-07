@@ -1,0 +1,88 @@
+[project]
+name = "signrule-decide"
+version = "0.1.0"
+description = "Typed, calibrated decision model for company signing rules in official commercial registers"
+requires-python = ">=3.12,<3.13"
+license = "Apache-2.0"
+dependencies = [
+    "httpx>=0.28",
+    "pydantic>=2.9",
+    "polars>=1.20",
+    "pyyaml>=6.0",
+    "datasketch>=1.6",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3",
+    "ruff>=0.15",
+    "pyright>=1.1.400",
+]
+# Training / evaluation stack. torch comes from the cu128 index (sm_120 / RTX 5090).
+ml = [
+    "torch>=2.8,<2.9",  # kev-1.0 pins torch<2.9; 2.8 cu128 has sm_120 kernels
+    "transformers>=5.17,<6",
+    "peft>=0.21",
+    "accelerate>=1.15",
+    "datasets>=4.0",
+    "safetensors>=0.6",
+    "scikit-learn>=1.9",
+    "sentencepiece>=0.2",  # mDeBERTa / XLM-R tokenizers (encoder baselines)
+    "protobuf>=5",
+    "pillow>=11",  # Clef-Flash (Qwen VL) processor, PIL backend
+    "torchvision>=0.23,<0.24",  # Clef-Flash video processor; matches torch 2.8
+    "kev @ git+https://github.com/jaredpalmer/kev@kev-1.0",
+    "flash-linear-attention>=0.5",  # Triton kernels for the Gated DeltaNet layers
+    # prebuilt CUDA kernel for the DeltaNet short convolution (otherwise a slow torch fallback)
+    "causal-conv1d @ https://github.com/Dao-AILab/causal-conv1d/releases/download/v1.7.0/causal_conv1d-1.7.0+cu12torch2.8cxx11abiTRUE-cp312-cp312-linux_x86_64.whl",
+]
+serve = [
+    "fastapi>=0.115",
+    "python-multipart>=0.0.20",  # form posts in the local annotation tool (Apache-2.0)
+    "uvicorn>=0.32",
+]
+# Austria HVD SOAP client.
+at = [
+    "zeep>=4.3",
+]
+
+[build-system]
+requires = ["hatchling>=1.25"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/signrule"]
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.uv]
+package = true
+default-groups = ["dev", "ml", "serve"]
+
+[[tool.uv.index]]
+name = "pytorch-cu128"
+url = "https://download.pytorch.org/whl/cu128"
+explicit = true
+
+[tool.uv.sources]
+torch = [{ index = "pytorch-cu128" }]
+torchvision = [{ index = "pytorch-cu128" }]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+
+[tool.pyright]
+include = ["src", "tests", "scripts", "eval", "server"]
+venvPath = "."
+venv = ".venv"
+pythonVersion = "3.12"
+typeCheckingMode = "standard"

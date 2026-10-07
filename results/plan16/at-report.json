@@ -1,0 +1,103 @@
+{
+ "model": "noat-4b-v2",
+ "at-text-2": {
+  "coalition_mean": 0.9936758893280633,
+  "coalition_items": 1265,
+  "min_signers": 0.9846153846153847,
+  "min_signers_items": 195,
+  "rule_type": 0.9230769230769231,
+  "ceo_alone": 1.0,
+  "chair_alone": 1.0,
+  "dangerous_rate": 0.005533596837944664,
+  "dangerous": 7,
+  "yes_no_items": 1265,
+  "alpha_2pct": {
+   "coverage": 0.9990680335507922,
+   "risk": 0.013059701492537313
+  }
+ },
+ "by_structure": {
+  "vorstand": {
+   "coalition_mean": 0.9967532467532467,
+   "coalition_items": 924,
+   "min_signers": 0.9908256880733946,
+   "min_signers_items": 109,
+   "rule_type": 0.8990825688073395,
+   "ceo_alone": 1.0,
+   "chair_alone": 1.0,
+   "dangerous_rate": 0.003246753246753247,
+   "dangerous": 3,
+   "yes_no_items": 924,
+   "alpha_2pct": {
+    "coverage": 1.0,
+    "risk": 0.01127554615926709
+   }
+  },
+  "partner": {
+   "coalition_mean": 0.9772727272727273,
+   "coalition_items": 176,
+   "min_signers": 0.9583333333333334,
+   "min_signers_items": 48,
+   "rule_type": 0.9375,
+   "ceo_alone": 1.0,
+   "chair_alone": null,
+   "dangerous_rate": 0.017045454545454544,
+   "dangerous": 3,
+   "yes_no_items": 176,
+   "alpha_2pct": {
+    "coverage": 0.9948320413436692,
+    "risk": 0.02077922077922078
+   }
+  },
+  "gmbh_multi": {
+   "coalition_mean": 0.9939393939393939,
+   "coalition_items": 165,
+   "min_signers": 1.0,
+   "min_signers_items": 38,
+   "rule_type": 0.9736842105263158,
+   "ceo_alone": 1.0,
+   "chair_alone": null,
+   "dangerous_rate": 0.006060606060606061,
+   "dangerous": 1,
+   "yes_no_items": 165,
+   "alpha_2pct": {
+    "coverage": 1.0,
+    "risk": 0.011764705882352941
+   }
+  }
+ },
+ "at:gold (both batches)": {
+  "coalition_mean": 0.9931129476584022,
+  "coalition_items": 2178,
+  "min_signers": 0.9768637532133676,
+  "min_signers_items": 389,
+  "rule_type": 0.9457364341085271,
+  "ceo_alone": 1.0,
+  "chair_alone": 1.0,
+  "dangerous_rate": 0.005509641873278237,
+  "dangerous": 12,
+  "yes_no_items": 2178,
+  "alpha_2pct": {
+   "coverage": 0.9994935426690301,
+   "risk": 0.013174562959209527
+  }
+ },
+ "at-text (first batch)": {
+  "coalition_mean": 0.9923329682365827,
+  "coalition_items": 913,
+  "min_signers": 0.9690721649484536,
+  "min_signers_items": 194,
+  "rule_type": 0.96875,
+  "ceo_alone": 1.0,
+  "chair_alone": 1.0,
+  "dangerous_rate": 0.00547645125958379,
+  "dangerous": 5,
+  "yes_no_items": 913,
+  "alpha_2pct": {
+   "coverage": 1.0,
+   "risk": 0.013311148086522463
+  }
+ },
+ "H21": true,
+ "H22": true
+}

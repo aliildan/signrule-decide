@@ -1,0 +1,21 @@
+# plan-13 run C″ (NO + AT, composition labels, extended coalitions). Same settings as C′.
+name: noat-4b-v2
+base: Qwen/Qwen3.5-4B-Base
+jurisdictions: ["no", "at"]
+split: random
+epochs: 2
+lr: 5.0e-5
+head_lr: 1.0e-4
+batch: 4
+accum: 2
+lora: 16
+lora_targets: all
+ord_w: 0.5
+max_state: 512
+seed: 13
+dup_weight: none
+# Each record's state runs once and its question branches continue from it (kev.shared_prefix,
+# the same computation as the row form). The row form repeats the state per question: C″ has
+# 45 % more questions per record than C′, and C′ already peaked at 30.2 of 31.4 GB, so the first
+# C″ attempt ran out of GPU memory at step 465 (2026-10-07, docs/decisions.md).
+shared_prefix: true

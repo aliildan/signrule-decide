@@ -1,0 +1,63 @@
+{
+ "at_gold": {
+  "noat-4b-v2": {
+   "coalition_mean": 0.9917452830188679,
+   "coalition_items": 848,
+   "min_signers": 0.967741935483871,
+   "rule_type": 0.967391304347826,
+   "derived_min_signers": 0.7771739130434783,
+   "derived_rule_type": 0.8804347826086957,
+   "coverage_2pct": 1.0,
+   "risk_2pct": 0.008254716981132075
+  },
+  "noat-4b-v1": {
+   "coalition_mean": 0.9917452830188679,
+   "coalition_items": 848,
+   "min_signers": 0.967741935483871,
+   "rule_type": 0.967391304347826,
+   "derived_min_signers": 0.7771739130434783,
+   "derived_rule_type": 0.8804347826086957,
+   "coverage_2pct": 1.0,
+   "risk_2pct": 0.008254716981132075
+  },
+  "phrase_at": {
+   "coalition_mean": 0.9445701357466063,
+   "coalition_items": 884,
+   "min_signers": 0.865979381443299,
+   "rule_type": 0.8333333333333334
+  }
+ },
+ "no_test_delta_c_minus_a": {
+  "ambiguity": 0.003170577045022216,
+  "ceo_alone": 0.0,
+  "ceo_with_chair": 0.0004755111745126106,
+  "ceo_with_one_board_member": 0.0022522522522522292,
+  "ceo_with_prokurist": 0.0,
+  "ceo_with_two_members": 0.20310296191819466,
+  "chair_alone": 0.004966139954853288,
+  "chair_with_deputy": 0.15911237016052882,
+  "chair_with_member": 0.00047214353163360645,
+  "deputy_with_member": 0.04801163918525708,
+  "member_alone": 0.0004928536224740876,
+  "min_signers": 0.0015854141894570128,
+  "parseable": 0.0,
+  "prokura_joint": 0.0,
+  "prokura_present": 0.0,
+  "prokurist_alone": 0.0,
+  "rule_type": 0.11291739894551844,
+  "three_members": 0.0028957528957529455,
+  "two_board_members_jointly": 0.0,
+  "two_ceos": 0.0,
+  "two_prokurists": 0.0
+ },
+ "hypotheses": {
+  "H11": false,
+  "H12": true,
+  "H13": false,
+  "H14": false
+ },
+ "secondary_not_preregistered": {
+  "H11_direct_heads": true,
+  "H14_direct_heads": true
+ }
+}

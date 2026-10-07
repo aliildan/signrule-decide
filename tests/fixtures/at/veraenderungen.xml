@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- _fixture: fictitious change-feed response for unit tests; not real data. -->
+<env:Envelope xmlns:env="http://www.w3.org/2003/05/soap-envelope">
+  <env:Body>
+    <ns9:VERAENDERUNGENFIRMARESPONSE xmlns:ns9="ns://firmenbuch.justiz.gv.at/Abfrage/VeraenderungenFirmaResponse" ns9:VON="2026-01-02" ns9:BIS="2026-01-02">
+      <ns9:VERAENDERUNG><ns9:FNR>999999 x</ns9:FNR><ns9:VNR>032</ns9:VNR><ns9:VOLLZUGSDATUM>2026-01-02</ns9:VOLLZUGSDATUM><ns9:ARTDERVERAENDERUNG>Änderung</ns9:ARTDERVERAENDERUNG></ns9:VERAENDERUNG>
+      <ns9:VERAENDERUNG><ns9:FNR>888888 y</ns9:FNR><ns9:VNR>001</ns9:VNR><ns9:VOLLZUGSDATUM>2026-01-02</ns9:VOLLZUGSDATUM><ns9:ARTDERVERAENDERUNG>Neueintragung</ns9:ARTDERVERAENDERUNG></ns9:VERAENDERUNG>
+      <ns9:VERAENDERUNG><ns9:FNR>999999 x</ns9:FNR><ns9:VNR>033</ns9:VNR><ns9:VOLLZUGSDATUM>2026-01-02</ns9:VOLLZUGSDATUM><ns9:ARTDERVERAENDERUNG>Änderung</ns9:ARTDERVERAENDERUNG></ns9:VERAENDERUNG>
+    </ns9:VERAENDERUNGENFIRMARESPONSE>
+  </env:Body>
+</env:Envelope>

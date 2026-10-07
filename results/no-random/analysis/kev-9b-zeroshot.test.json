@@ -1,0 +1,121 @@
+{
+ "model": "kev-9b-zeroshot",
+ "split": "random",
+ "part": "test",
+ "n_items": 5477,
+ "rule_type_confusion": {
+  "board_jointly": {
+   "board_jointly": 18,
+   "joint_two_specific": 1,
+   "other_unmapped": 1,
+   "sole_specific_roles": 1
+  },
+  "joint_role_combo": {
+   "joint_role_combo": 20,
+   "joint_two_specific": 2,
+   "other_unmapped": 3,
+   "sole_specific_roles": 2,
+   "mixed_alternatives": 1
+  },
+  "joint_three_plus": {
+   "other_unmapped": 9,
+   "board_jointly": 1,
+   "joint_three_plus": 1
+  },
+  "joint_two_any": {
+   "joint_two_any": 15,
+   "board_jointly": 21,
+   "other_unmapped": 1,
+   "mixed_alternatives": 6,
+   "joint_three_plus": 1
+  },
+  "joint_two_specific": {
+   "joint_two_specific": 7
+  },
+  "mixed_alternatives": {
+   "mixed_alternatives": 19
+  },
+  "no_rule_registered": {
+   "sole_specific_roles": 51,
+   "other_unmapped": 15,
+   "mixed_alternatives": 74,
+   "joint_role_combo": 33,
+   "sole_chair": 8,
+   "no_rule_registered": 2,
+   "joint_two_any": 2,
+   "joint_three_plus": 4,
+   "joint_two_specific": 21,
+   "board_jointly": 7
+  },
+  "sole_any_board_member": {
+   "sole_specific_roles": 60,
+   "sole_any_board_member": 16,
+   "sole_chair": 4,
+   "mixed_alternatives": 5,
+   "other_unmapped": 1
+  },
+  "sole_ceo": {
+   "sole_ceo": 4,
+   "mixed_alternatives": 3
+  },
+  "sole_chair": {
+   "sole_specific_roles": 14,
+   "sole_chair": 27
+  },
+  "sole_specific_roles": {
+   "sole_specific_roles": 43,
+   "joint_two_specific": 33,
+   "mixed_alternatives": 8,
+   "other_unmapped": 14,
+   "joint_role_combo": 1
+  }
+ },
+ "accuracy_by_text_length": {
+  "<160": {
+   "n": 1334,
+   "accuracy": 0.5217391304347826
+  },
+  "<20": {
+   "n": 8,
+   "accuracy": 0.5
+  },
+  "<40": {
+   "n": 1193,
+   "accuracy": 0.6420787929589271
+  },
+  "<80": {
+   "n": 2702,
+   "accuracy": 0.6054774241302738
+  },
+  ">=160": {
+   "n": 119,
+   "accuracy": 0.21008403361344538
+  },
+  "none": {
+   "n": 121,
+   "accuracy": 0.6198347107438017
+  }
+ },
+ "accuracy_by_legal_form": {
+  "AS": {
+   "n": 5468,
+   "accuracy": 0.5846744696415508
+  },
+  "ASA": {
+   "n": 9,
+   "accuracy": 0.5555555555555556
+  }
+ },
+ "errors_by_question": {
+  "rule_type": 408,
+  "min_signers": 405,
+  "ceo_alone": 283,
+  "ambiguity": 230,
+  "two_board_members_jointly": 260,
+  "chair_alone": 234,
+  "ceo_with_one_board_member": 359,
+  "parseable": 19,
+  "prokura_present": 75,
+  "prokura_joint": 2
+ }
+}

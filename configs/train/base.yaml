@@ -1,0 +1,17 @@
+# Main recipe (CLAUDE.md §7.3, design-01 D1/D2/D7). Kev does the modelling; the wrapper forces
+# all augmentation/replay knobs off and refuses data that hasn't passed `make data-check`.
+name: no-9b-base
+base: Qwen/Qwen3.5-9B-Base
+jurisdictions: ["no"]
+split: random
+epochs: 2
+lr: 5.0e-5
+head_lr: 1.0e-4
+batch: 4
+accum: 2
+lora: 16
+lora_targets: all
+ord_w: 0.5            # ranked-probability score for the `ambiguity` score question
+max_state: 512
+seed: 13
+dup_weight: none      # none | sqrt (oversample real duplicates; never synthetic)

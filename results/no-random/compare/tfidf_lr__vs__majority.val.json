@@ -1,0 +1,26 @@
+{
+ "a": "tfidf_lr",
+ "b": "majority",
+ "part": "val",
+ "split": "random",
+ "n_items": 3380,
+ "n_clusters": 210,
+ "mean_accuracy_diff": 0.16610694122355366,
+ "ci95": [
+  0.0828626839879524,
+  0.24633692565120188
+ ],
+ "a_beats_b": true,
+ "per_question_diff": {
+  "ambiguity": 0.35359116022099446,
+  "ceo_alone": 0.07605633802816901,
+  "ceo_with_one_board_member": 0.07605633802816901,
+  "chair_alone": 0.17086834733893558,
+  "min_signers": 0.34405940594059403,
+  "parseable": 0.0023752969121140144,
+  "prokura_joint": 0.05235602094240838,
+  "prokura_present": 0.3161764705882353,
+  "rule_type": 0.23249299719887956,
+  "two_board_members_jointly": 0.037037037037037035
+ }
+}

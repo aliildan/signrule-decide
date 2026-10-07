@@ -1,0 +1,31 @@
+{
+ "model": "no-4b-v01",
+ "split": "random",
+ "part": "test",
+ "alpha": 0.02,
+ "n_requests": 655,
+ "consistency_flagged": 1,
+ "flagged_share": 0.0015267175572519084,
+ "structural_accuracy": {
+  "flagged": 1.0,
+  "clean": 0.9995655951346655
+ },
+ "structural_items": {
+  "flagged": 2,
+  "clean": 2302
+ },
+ "selective": {
+  "ltt": {
+   "coverage": 0.9157185976317622,
+   "risk": 0.006085192697768763
+  },
+  "ltt+parseable": {
+   "coverage": 0.826097051311818,
+   "risk": 0.006464305789769534
+  },
+  "ltt+parseable+consistency": {
+   "coverage": 0.8256326909681914,
+   "risk": 0.0064679415073115865
+  }
+ }
+}

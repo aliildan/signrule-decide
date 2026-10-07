@@ -1,0 +1,68 @@
+# Source role codes -> CIR roles and original-language labels for the model state (design-02 §8).
+# Reviewed by hand; never model-generated. Unknown codes fall back to the register's own label
+# and CIR role OTHER (and are counted in the datasheet).
+"NO":
+  codes:
+    DAGL: {cir: CEO, label: "Daglig leder"}
+    LEDE: {cir: CHAIR, label: "Styrets leder"}
+    NEST: {cir: DEPUTY_CHAIR, label: "Nestleder"}
+    MEDL: {cir: BOARD_MEMBER, label: "Styremedlem"}
+    VARA: {cir: OTHER, label: "Varamedlem"}
+    DTPR: {cir: PARTNER, label: "Deltaker med proratarisk ansvar"}
+    DTSO: {cir: PARTNER, label: "Deltaker med solidarisk ansvar"}
+    KOMP: {cir: PARTNER, label: "Komplementar"}
+    SIGN: {cir: SIGNATORY, label: "Signatur"}
+    SIFE: {cir: SIGNATORY, label: "Signatur i fellesskap"}
+    SIHV: {cir: SIGNATORY, label: "Signatur hver for seg"}
+    PROK: {cir: PROKURIST, label: "Prokura"}
+    POFE: {cir: PROKURIST, label: "Prokura i fellesskap"}
+    POHV: {cir: PROKURIST, label: "Prokura hver for seg"}
+    INNH: {cir: OTHER, label: "Innehaver"}
+  order: [DAGL, LEDE, NEST, MEDL, VARA, DTPR, DTSO, KOMP, SIGN, SIFE, SIHV, PROK, POFE, POHV, INNH]
+  # Questions without meaning for a legal form (removed from training and answered with abstain).
+  not_applicable: {}
+"AT":
+  # Firmenbuch function codes (FKEN); Vorstand members are split by VSBEIDE (board position).
+  # Labels are the register's terms in neutral singular form (the register prints "…/IN").
+  codes:
+    GF: {cir: CEO, label: "Geschäftsführer"}
+    "VM:V": {cir: CHAIR, label: "Vorsitzender des Vorstands"}
+    "VM:O": {cir: CHAIR, label: "Obmann"}
+    "VM:B": {cir: DEPUTY_CHAIR, label: "Stellvertreter des Vorsitzenden"}
+    "VM:R": {cir: DEPUTY_CHAIR, label: "Obmann-Stellvertreter"}
+    "VM:S": {cir: BOARD_MEMBER, label: "stellvertretendes Vorstandsmitglied"}
+    VM: {cir: BOARD_MEMBER, label: "Vorstandsmitglied"}
+    KP: {cir: PARTNER, label: "unbeschränkt haftender Gesellschafter"}
+    GL: {cir: CEO, label: "Geschäftsleiter"}
+    AB: {cir: OTHER, label: "Abwickler"}
+    MW: {cir: OTHER, label: "Masseverwalter"}
+    SV: {cir: OTHER, label: "ständiger Vertreter"}
+    PR: {cir: PROKURIST, label: "Prokurist"}
+  order: [GF, "VM:V", "VM:O", "VM:B", "VM:R", VM, "VM:S", KP, GL, AB, MW, SV, PR]
+  not_applicable: {}
+"DK":
+  # CVR ES functions, keyed "<organisationsNavn>:<FUNKTION>" (ingest_dk projection). A chair is
+  # registered as FORMAND only (not also as BESTYRELSESMEDLEM; aggregate check 2026-10-07). Other
+  # Direktion titles (økonomidirektør, underdirektør, …) count as Direktør (normalize_dk.dk_code).
+  codes:
+    "Direktion:ADM. DIR.": {cir: CEO, label: "Administrerende direktør"}
+    "Direktion:DIREKTØR": {cir: CEO, label: "Direktør"}
+    "Bestyrelse:FORMAND": {cir: CHAIR, label: "Formand"}
+    "Bestyrelse:NÆSTFORMAND": {cir: DEPUTY_CHAIR, label: "Næstformand"}
+    "Bestyrelse:BESTYRELSESMEDLEM": {cir: BOARD_MEMBER, label: "Bestyrelsesmedlem"}
+    "Bestyrelse:SUPPLEANT": {cir: OTHER, label: "Suppleant"}
+    "Direktion:SUPPLEANT": {cir: OTHER, label: "Suppleant for direktionen"}
+    "Interessenter:INTERESSENTER": {cir: PARTNER, label: "Interessent"}
+    "Komplementarer:KOMPLEMENTARER": {cir: PARTNER, label: "Komplementar"}
+    "Filialbestyrere:FILIALBESTYRERE": {cir: OTHER, label: "Filialbestyrer"}
+    "Uddeler:UDDELER": {cir: OTHER, label: "Uddeler"}
+    "Tilsynsråd:MEDLEM": {cir: OTHER, label: "Medlem af tilsynsrådet"}
+    "Tilsynsråd:FORMAND": {cir: OTHER, label: "Formand for tilsynsrådet"}
+    "Daglig ledelse:DAGLIG LEDELSE": {cir: OTHER, label: "Daglig ledelse"}
+    "Generalagent:GENERALAGENT": {cir: OTHER, label: "Generalagent"}
+  order: ["Direktion:ADM. DIR.", "Direktion:DIREKTØR", "Bestyrelse:FORMAND", "Bestyrelse:NÆSTFORMAND",
+          "Bestyrelse:BESTYRELSESMEDLEM", "Bestyrelse:SUPPLEANT", "Direktion:SUPPLEANT",
+          "Interessenter:INTERESSENTER", "Komplementarer:KOMPLEMENTARER", "Filialbestyrere:FILIALBESTYRERE",
+          "Uddeler:UDDELER", "Daglig ledelse:DAGLIG LEDELSE", "Generalagent:GENERALAGENT",
+          "Tilsynsråd:FORMAND", "Tilsynsråd:MEDLEM"]
+  not_applicable: {}

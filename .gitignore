@@ -1,0 +1,34 @@
+# ---- Private: never commit (CLAUDE.md §2, §9) ----
+CLAUDE.md
+docs/
+notes/
+secrets/
+data/
+runs/
+*.env
+.env
+.env.*
+
+# ---- Model / tensor artefacts ----
+*.gguf
+*.safetensors
+*.pt
+*.pth
+*.bin
+*.ckpt
+*.onnx
+
+# ---- Python / tooling ----
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.pyright/
+*.egg-info/
+build/
+dist/
+
+# ---- Claude Code (per-user) ----
+.claude/settings.local.json

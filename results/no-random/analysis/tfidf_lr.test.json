@@ -1,0 +1,111 @@
+{
+ "model": "tfidf_lr",
+ "split": "random",
+ "part": "test",
+ "n_items": 5477,
+ "rule_type_confusion": {
+  "board_jointly": {
+   "board_jointly": 15,
+   "no_rule_registered": 6
+  },
+  "joint_role_combo": {
+   "no_rule_registered": 11,
+   "joint_role_combo": 17
+  },
+  "joint_three_plus": {
+   "no_rule_registered": 11
+  },
+  "joint_two_any": {
+   "joint_two_any": 40,
+   "mixed_alternatives": 2,
+   "no_rule_registered": 2
+  },
+  "joint_two_specific": {
+   "joint_two_specific": 7
+  },
+  "mixed_alternatives": {
+   "mixed_alternatives": 17,
+   "joint_two_any": 1,
+   "no_rule_registered": 1
+  },
+  "no_rule_registered": {
+   "no_rule_registered": 175,
+   "sole_chair": 18,
+   "sole_specific_roles": 8,
+   "joint_two_any": 2,
+   "joint_two_specific": 5,
+   "joint_role_combo": 4,
+   "board_jointly": 4,
+   "mixed_alternatives": 1
+  },
+  "sole_any_board_member": {
+   "sole_any_board_member": 48,
+   "no_rule_registered": 20,
+   "sole_chair": 10,
+   "sole_specific_roles": 8
+  },
+  "sole_ceo": {
+   "sole_ceo": 4,
+   "mixed_alternatives": 1,
+   "joint_two_any": 2
+  },
+  "sole_chair": {
+   "sole_specific_roles": 7,
+   "sole_chair": 32,
+   "no_rule_registered": 2
+  },
+  "sole_specific_roles": {
+   "sole_specific_roles": 88,
+   "no_rule_registered": 6,
+   "joint_two_specific": 5
+  }
+ },
+ "accuracy_by_text_length": {
+  "<160": {
+   "n": 1334,
+   "accuracy": 0.8740629685157422
+  },
+  "<20": {
+   "n": 8,
+   "accuracy": 1.0
+  },
+  "<40": {
+   "n": 1193,
+   "accuracy": 0.8331936295054484
+  },
+  "<80": {
+   "n": 2702,
+   "accuracy": 0.8852701702442635
+  },
+  ">=160": {
+   "n": 119,
+   "accuracy": 0.8571428571428571
+  },
+  "none": {
+   "n": 121,
+   "accuracy": 0.9752066115702479
+  }
+ },
+ "accuracy_by_legal_form": {
+  "AS": {
+   "n": 5468,
+   "accuracy": 0.8727139722019019
+  },
+  "ASA": {
+   "n": 9,
+   "accuracy": 0.8888888888888888
+  }
+ },
+ "errors_by_question": {
+  "ceo_with_one_board_member": 101,
+  "rule_type": 137,
+  "chair_alone": 93,
+  "two_board_members_jointly": 53,
+  "min_signers": 114,
+  "prokura_present": 69,
+  "ceo_alone": 37,
+  "ambiguity": 60,
+  "parseable": 18,
+  "prokura_joint": 15
+ }
+}
