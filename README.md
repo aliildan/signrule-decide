@@ -104,29 +104,15 @@ flowchart LR
 **1. Install.** You need [uv](https://docs.astral.sh/uv/) and Python 3.12. The base model has
 4.66 B parameters, so its 16-bit weights take about 9.3 GB of GPU or unified memory.
 
-<table>
-<tr><th>Linux + NVIDIA GPU (tested)</th><th>macOS, Apple silicon (experimental)</th></tr>
-<tr><td>
-
 ```bash
 git clone https://github.com/aliildan/signrule-decide
 cd signrule-decide
-uv sync    # CUDA 12.8 wheels; RTX 5090 tested
+uv sync
 ```
 
-</td><td>
-
-```bash
-git clone https://github.com/aliildan/signrule-decide
-cd signrule-decide
-uv sync    # PyPI torch (MPS) + mlx-lm
-```
-
-</td></tr>
-</table>
-
-The macOS path resolves and installs without the CUDA-only packages, and the server then uses Kev's
-MLX backend. It has not yet been confirmed end to end on a Mac, so please
+On Linux this installs the CUDA 12.8 wheels (tested on an RTX 5090). On a Mac with Apple silicon it
+installs PyPI torch (MPS) and mlx-lm instead, and the server uses Kev's MLX backend. The Mac path is
+experimental: it has not yet been confirmed end to end, so please
 [open an issue](https://github.com/aliildan/signrule-decide/issues) if it fails for you.
 
 **2. Download the weights and start the server.**
@@ -135,10 +121,10 @@ MLX backend. It has not yet been confirmed end to end on a Mac, so please
 uv run hf download aildan/signrule-decide-4b --local-dir runs/signrule-decide-4b
 uv run python server/app.py --run runs/signrule-decide-4b \
   --policy NO=runs/signrule-decide-4b/calibration/NO.json \
-  --policy AT=runs/signrule-decide-4b/calibration/AT.json      # /v1/systemone on localhost:8300
+  --policy AT=runs/signrule-decide-4b/calibration/AT.json
 ```
 
-`--device auto` is the default: CUDA, then Apple silicon, then CPU. The server prints the device
+The server answers at `http://localhost:8300/v1/systemone`. `--device auto` is the default: CUDA, then Apple silicon, then CPU. The server prints the device
 it picked. `--alpha` sets the risk level (default `0.02`).
 
 **3. Ask.** Use the canonical wordings from `configs/questions.yaml`, because the calibration
@@ -304,12 +290,14 @@ official sources, rate-limited and cached, with a descriptive User-Agent:
 <summary><b>Pipeline commands</b></summary>
 
 ```bash
-make data && make data-check                                   # Norway
+make data && make data-check
 python -m signrule.normalize.pipeline_at run && python -m signrule.normalize.pipeline_at check
-python -m signrule.train.kev_wrapper train --config configs/train/4b-noat-v2.yaml   # ≈ 15 h, one RTX 5090
+python -m signrule.train.kev_wrapper train --config configs/train/4b-noat-v2.yaml
 python -m signrule.train.kev_wrapper bench --run runs/<name> --jurisdiction <j> --split <s> --part <p> --raw
 python eval/run_all.py --jurisdiction <j> --split random
 ```
+
+`make data` builds the Norwegian data; training takes about 15 h on one RTX 5090.
 
 </details>
 

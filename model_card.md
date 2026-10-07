@@ -21,11 +21,13 @@ interpreter) is the main source of training labels; Denmark is a zero-shot test.
 
 ```bash
 git clone https://github.com/aliildan/signrule-decide && cd signrule-decide && uv sync
-hf download aildan/signrule-decide-4b --local-dir runs/signrule-decide-4b
+uv run hf download aildan/signrule-decide-4b --local-dir runs/signrule-decide-4b
 uv run python server/app.py --run runs/signrule-decide-4b \
   --policy NO=runs/signrule-decide-4b/calibration/NO.json \
-  --policy AT=runs/signrule-decide-4b/calibration/AT.json      # /v1/systemone on :8300
+  --policy AT=runs/signrule-decide-4b/calibration/AT.json
 ```
+
+The server answers at `http://localhost:8300/v1/systemone`.
 
 The base model `Qwen/Qwen3.5-4B-Base` is downloaded on first start. Files: `adapter_model.safetensors`
 (LoRA), `head.pt` (pointer head, PyTorch state), `calibration/NO.json` and `calibration/AT.json`
