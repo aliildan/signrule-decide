@@ -53,9 +53,12 @@ def summarise(rows: list[dict[str, Any]], thresholds: dict[str, float | None]) -
         "min_signers_items": len(mins),
         "rule_type": acc([r for r in rows if r["qid"] == "rule_type"]),
         "ceo_alone": acc([r for r in rows if r["qid"] == "ceo_alone"]),
+        "ceo_alone_items": sum(r["qid"] == "ceo_alone" for r in rows),
         "chair_alone": acc([r for r in rows if r["qid"] == "chair_alone"]),
         "dangerous_rate": len(dangerous) / len(yn) if yn else None,
         "dangerous": len(dangerous),
+        # how sure the model was when it said "can sign" wrongly (abstention cannot catch these)
+        "dangerous_conf_ge_0_9": sum(r["conf"] >= 0.9 for r in dangerous),
         "yes_no_items": len(yn),
         "alpha_2pct": {
             "coverage": len(answered) / len(structural) if structural else None,

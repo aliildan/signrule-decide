@@ -5,7 +5,7 @@
 ### Who may sign for this company?
 
 Typed, calibrated answers from official commercial-register extracts,<br>
-computed on your own GPU, with no register data sent anywhere.
+computed on your own GPU: answering a request sends nothing anywhere.
 
 [![Licence: Apache-2.0](https://img.shields.io/badge/licence-Apache--2.0-blue.svg)](LICENSE)
 [![Python 3.12](https://img.shields.io/badge/python-3.12-3776AB.svg?logo=python&logoColor=white)](pyproject.toml)
@@ -49,11 +49,10 @@ When the model is not confident enough for the risk level you chose, it does not
 <!-- table:headline -->
 | Austria, 400 extracts never trained on | SignRule-Decide 4B |
 |---|---|
-| Managing director alone | 100.0 % |
 | Office and coalition questions (15 yes/no, 2,178 answers) | 99.3 % |
-| Minimum signers | 97.7 % |
+| Minimum signers (389 extracts) | 97.7 % |
 | Rule type (14 patterns) | 94.6 % |
-| Dangerous errors ("can sign" when it cannot) | 0.6 % (12 of 2,178) |
+| Dangerous errors ("can sign" when it cannot) | 0.6 % (12 of 2,178; 10 with confidence ≥ 0.9) |
 | At a 2 % risk target | answers 99.9 %, observed risk 1.3 % |
 <!-- /table -->
 
@@ -61,14 +60,16 @@ All numbers in this README are generated from [`results/`](results/) by `scripts
 The 400 Austrian extracts are a reference set: two different AI assistants answered each one
 independently, only the answers they agree on are kept, and a person checked a sample. The numbers
 measure agreement with that consensus, not with fully human labels
-([details](#evaluation-data)).
+([details](#evaluation-data)). Minimum signers is the model's direct answer; derived from its own
+coalition answers it reached 77.7 % on the first batch (a pre-registered criterion that was not
+met).
 
 ## Why SignRule-Decide
 
 | | |
 |---|---|
-| **Decisions, not text** | Every answer is a probability over fixed options: yes/no, a number of signers, a rule type. Nothing is generated, so nothing can be made up. |
-| **Knows when to stay silent** | Probabilities are calibrated per question type. At the risk level you choose (1, 2 or 5 %), the server abstains on any question it cannot answer within it. |
+| **Decisions, not text** | Every answer is a probability over fixed options: yes/no, a number of signers, a rule type. Nothing is generated, so the model cannot invent text. It can still be wrong with high confidence, which is why a person reviews binding decisions. |
+| **Can stay silent** | Probabilities are calibrated per question type. At the risk level you choose (1, 2 or 5 %), the server abstains on questions it cannot answer within that risk. On Austria the fitted thresholds rarely trigger ([limitations](#limitations-and-responsible-use)). |
 | **Private by design** | Names are never needed: callers pass roles and counts. Names sent anyway are removed and masked as `[PERSON_n]` in the text, and a text that still looks like it holds a name abstains. Everything runs on your own hardware. |
 | **One model, many questions** | 15 office and coalition questions, the minimum number of signers, the rule type and procuration, all asked of one extract in one request. |
 | **Several registers** | Austria and Norway are validated; Denmark is in beta. One question set and one API cover all three. |
@@ -153,9 +154,9 @@ abstains. The API follows the System One schema (`/v1/systemone`), so existing J
 work unchanged. To see the hand-written German examples against your own server, run
 `uv run python scripts/demo.py --lang de`.
 
-> **Ollama.** Ollama (v0.35+) serves decision models over the same `/v1/systemone` API, for the
-> Clef, Laya and Strands Decider architectures. This checkpoint is in Kev's format, which Ollama
-> does not load yet, so use the server above. The requests are identical.
+> **Ollama.** Ollama (v0.35+) serves its own decision models over the same `/v1/systemone` API
+> ([list](https://ollama.com/search?c=decision)). It cannot load this checkpoint, which is in
+> Kev's format, so use the server above.
 
 ## Accuracy
 
@@ -174,9 +175,11 @@ SignRule-Decide 4B on the same items: dangerous yes/no errors ("can sign" when t
 <!-- /table -->
 
 **An honest comparison.** A small encoder (mmBERT-base, about 300M parameters) fine-tuned on the
-same Austrian labels comes close on this set. SignRule-Decide makes fewer structural errors and
-ranks its own confidence better, and the abstention depends on that ranking. If you need only
-Austria and only these questions, a fine-tuned encoder is a valid, cheaper choice.
+same Austrian labels comes close on this set: the differences are a few answers per question
+(about 3 of 389 on minimum signers) and were not tested for significance. The clearer difference
+is that SignRule-Decide ranks its own confidence better (area under the risk–coverage curve 0.0052
+against 0.0075), and abstention depends on that ranking. If you need only Austria and only these
+questions, a fine-tuned encoder is a valid, cheaper choice.
 
 ### Supported registers
 
@@ -225,11 +228,15 @@ Austria and only these questions, a fine-tuned encoder is a valid, cheaper choic
 | Set | Labels | Size |
 |---|---|---|
 | Register-labelled test parts | official codes (Norway interpreter, Austrian court codes) | thousands of texts, see the tables |
-| Reference sets (Austria, Norway, Denmark) | two different AI assistants answered independently; kept where both agree; human spot checks | 400 / 250 / 300 extracts |
+| Reference sets (Austria, Norway, Denmark) | two different hosted AI assistants answered the masked extracts independently; kept where both agree; human spot checks | 400 / 250 / 300 extracts |
 
-The hypotheses and decision rules were written down before any result was read. The project owner
-chose the release model even though it missed one criterion, on the experimental ambiguity score.
-The [model card](model_card.md) documents both.
+The two assistants agreed on almost every structural answer (Cohen's κ 0.98–1.00), so very few
+extracts were dropped. Agreement this high can also hide blind spots the two assistants share.
+
+The hypotheses and decision rules were written down before any result was read. Six of them were
+not met and one only partly; all are published in the [model card](model_card.md). The project
+owner chose the release model although its decision criterion (on the experimental ambiguity
+score) was not met.
 
 ## Data and hardware
 
@@ -269,8 +276,13 @@ The serving latency was measured with an earlier checkpoint of the same 4B archi
   question ("can a managing director act alone?") is then open by our convention, and the model
   tends to answer "yes" if any holder may act alone.
 - **Partnerships** (OG/KG) are the weakest Austrian structure.
+- **Abstention rarely triggers on Austria.** The Austrian validation part is mostly standard
+  wording, so the fitted thresholds sit at their lowest level and the server answers 99.9 % of the
+  questions. 10 of the 12 dangerous errors came with a confidence of 0.9 or more, where no threshold
+  would catch them.
 - **Denmark (beta):** the model often reads *"direktionen"* as a collective body. The abstention
-  thresholds do not transfer to a register the model has never seen.
+  thresholds do not transfer to a register the model has never seen: at a 5 % risk target the
+  observed risk was 14.3 %.
 - The **ambiguity** score is experimental and is never served as a decision.
 - No evaluation subset has been **fully verified by a person**. The hard-case numbers measure
   agreement with the consensus of two AI assistants, spot-checked by a person.

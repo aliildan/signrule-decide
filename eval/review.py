@@ -99,6 +99,25 @@ def render_record(
     return "\n".join(lines)
 
 
+def render_strands(req: dict[str, Any], scrub: Scrubber, qid: str) -> str:
+    """The scrubbed record's Strands Decider prompt for one question, as the trainer renders it
+    (plan-17: review the new input format before training). Needs the `strands` group."""
+    from strands_decider.data.format import Example
+    from strands_decider.prompting import build_prompt
+
+    from signrule.train.strands_data import to_examples
+
+    st = dict(req["state"])
+    for k in TEXT_KEYS:
+        if st.get(k):
+            st[k] = scrub.text(str(st[k]))
+    if st.get("role_notes"):
+        st["role_notes"] = [{**n, "note": scrub.text(str(n["note"]))} for n in st["role_notes"]]
+    (ex,) = to_examples({"state": st, "questions": {qid: req["questions"][qid]}})
+    text, _ = build_prompt(ex["state"], Example.from_dict(ex).to_question())
+    return f"--- strands prompt ({qid}, label {ex['options'][ex['label']][0]}) ---\n{text}"
+
+
 def load_predictions(tag: str, model: str, part: str) -> dict[str, dict[str, tuple[str, float]]]:
     qc = load_questions()
     side = REPO_ROOT / "runs" / "eval" / tag / f"{model}.{part}.items.jsonl"
@@ -124,6 +143,7 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--qid", help="only records that carry this question")
     ap.add_argument("--errors", action="store_true", help="only records the model got wrong")
     ap.add_argument("--ids", help="comma-separated record ids (e.g. flagged by local_audit)")
+    ap.add_argument("--render-strands", metavar="QID", help="also show the Strands prompt")
     a = ap.parse_args(argv)
     if a.n > MAX_RECORDS:
         raise SystemExit(f"at most {MAX_RECORDS} records per review")
@@ -158,6 +178,13 @@ def main(argv: list[str] | None = None) -> int:
         render_record(r, scrub, (preds or {}).get(r["_meta"]["id"]) if preds else None)
         for r in sample
     ]
+    if a.render_strands:
+        blocks = [
+            b + "\n" + render_strands(r, scrub, a.render_strands)
+            if a.render_strands in r["questions"]
+            else b
+            for b, r in zip(blocks, sample, strict=True)
+        ]
     ts = datetime.now(UTC).strftime("%Y%m%dT%H%M%SZ")
     header = (
         f"review {a.jurisdiction}/{a.split}/{a.part} · {len(sample)} of {len(pool)} matching · "

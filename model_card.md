@@ -33,9 +33,9 @@ The base model `Qwen/Qwen3.5-4B-Base` is downloaded on first start. Files: `adap
 (LoRA), `head.pt` (pointer head, PyTorch state), `calibration/NO.json` and `calibration/AT.json`
 (temperatures and abstention thresholds fitted on each register's validation part), tokenizer and
 training configuration. Request format and examples: the GitHub README and `results/demo/demo-de.md`.
-Ollama (v0.35+) serves decision models over the same `/v1/systemone` API for the Clef, Laya and
-Strands Decider architectures; this checkpoint is in Kev's format, which Ollama does not load yet.
-Use the reference server; the requests are identical.
+Ollama (v0.35+) serves its own decision models over the same `/v1/systemone` API
+(https://ollama.com/search?c=decision); it cannot load this checkpoint, which is in Kev's format.
+Use the reference server.
 
 ## Model details
 
@@ -102,10 +102,13 @@ Companies read: Norway with 1,274,984 API responses (signing and procuration); A
 ## Evaluation
 
 **Reference sets (read before quoting):** for every extract, two *different* AI assistants
-answered independently following written guidelines; only answers both agree on are kept
-(disagreements: documented adjudication), and a person spot-checked a sample. The numbers therefore
-measure agreement with an AI consensus, not with fully human labels; Cohen's κ between the two
-assistants is in `results/gold/`. Items were never seen in training. Austria: 400 free-text
+answered the masked extracts independently following written guidelines; only answers both agree
+on are kept (disagreements: documented adjudication), and a person spot-checked a sample. The
+numbers therefore measure agreement with an AI consensus, not with fully human labels. The two
+assistants agreed on almost every structural answer (Cohen's κ 0.98–1.00, `results/gold/`), so very
+few extracts were dropped; agreement this high can also hide blind spots they share. Minimum
+signers is the model's direct answer; derived from its own coalition answers it reached 77.7 % on
+the first batch (pre-registered H16, not met). Items were never seen in training. Austria: 400 free-text
 extracts in two batches, the second focused on boards and partnerships. **Register-labelled test
 parts** use the registers' own codes as labels. Numbers are generated from `results/`.
 
@@ -145,8 +148,10 @@ SignRule-Decide 4B on the same items: dangerous yes/no errors ("can sign" when t
 <!-- /table -->
 
 A fine-tuned encoder (mmBERT-base) trained on the same Austrian labels is close to this model on
-the Austrian gold set (table); this model ranks its own confidence better (lower risk at the
-same coverage), which the abstention relies on, and serves several registers with one question set.
+the Austrian gold set (table): the differences are a few answers per question and were not tested
+for significance. The clearer difference is that this model ranks its own confidence better (area
+under the risk–coverage curve 0.0052 against 0.0075), which abstention relies on; it also serves
+several registers with one question set.
 
 Benchmarks encode every request as the server does (states up to 64k tokens). An earlier benchmark
 setting skipped Austrian states over 384 tokens; all numbers above include them.
@@ -157,14 +162,19 @@ setting skipped Austrian states over 384 tokens; all numbers above include them.
   "cannot" (see the dangerous-error line above). Keep a human in the loop.
 - **Per-person powers:** when holders of one office have different powers, the office-level
   question is open by our convention; the model tends to answer "yes" if one holder may act alone.
+- **Abstention rarely triggers on Austria:** the Austrian validation part is mostly standard
+  wording, so the fitted thresholds sit at their lowest level and the server answers 99.9 % of the
+  questions; 10 of the 12 dangerous errors came with a confidence of 0.9 or more.
 - **Denmark (zero-shot):** "direktionen" is often read as a collective body; abstention thresholds
-  fitted on Norway and Austria do not transfer to an unseen register (observed risk above the
+  fitted on Norway and Austria do not transfer to an unseen register (observed risk 14.3 % at a 5 %
   target). Treat Danish answers as beta.
+- **No invented text, but confident errors:** the model only scores fixed options, so it cannot
+  invent text, yet it can choose a wrong option with high confidence.
 - **Ambiguity score:** experimental, never served as a decision.
 - **No fully human-verified evaluation subset:** the hard-case numbers are agreement with the
   consensus of two AI assistants (human spot-checked), not with independent human annotators.
 - **Pre-registration:** hypotheses and decision rules were written before results were read
-  (`results/` holds every outcome). The release model was chosen by the project owner although one
+  (`results/` holds every outcome; six were not met and one only partly). The release model was chosen by the project owner although one
   pre-registered criterion (no drop on any question vs. the previous model; it failed on the
   experimental ambiguity score) was not met; both models' results are published.
 
@@ -177,8 +187,10 @@ Training labels never come from language models.
 ## Privacy
 
 The model never needs names: callers pass roles and counts; the reference server masks names that
-are passed anyway and abstains when a text still looks like it contains one. No register data,
-training data or gold annotations are distributed.
+are passed anyway and abstains when a text still looks like it contains one. Serving runs locally
+and sends nothing anywhere. Training ran locally; to build the reference sets, masked extracts were
+given to hosted AI assistants. No register data, training data or reference answers are
+distributed.
 
 ## Citation
 

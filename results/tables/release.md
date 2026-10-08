@@ -2,11 +2,10 @@
 
 | Austria, 400 extracts never trained on | SignRule-Decide 4B |
 |---|---|
-| Managing director alone | 100.0 % |
 | Office and coalition questions (15 yes/no, 2,178 answers) | 99.3 % |
-| Minimum signers | 97.7 % |
+| Minimum signers (389 extracts) | 97.7 % |
 | Rule type (14 patterns) | 94.6 % |
-| Dangerous errors ("can sign" when it cannot) | 0.6 % (12 of 2,178) |
+| Dangerous errors ("can sign" when it cannot) | 0.6 % (12 of 2,178; 10 with confidence ≥ 0.9) |
 | At a 2 % risk target | answers 99.9 %, observed risk 1.3 % |
 
 ## at-gold

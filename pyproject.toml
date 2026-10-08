@@ -1,6 +1,6 @@
 [project]
 name = "signrule-decide"
-version = "0.1.0"
+version = "1.0.0"
 description = "Typed, calibrated decision model for company signing rules in official commercial registers"
 requires-python = ">=3.12,<3.13"
 license = "Apache-2.0"
@@ -43,6 +43,11 @@ serve = [
     "uvicorn>=0.32",
     # Apple silicon: Kev's MLX backend for the hybrid Qwen3.5 backbone (server --device mps)
     "mlx-lm>=0.31.3,<0.32; sys_platform == 'darwin' and platform_machine == 'arm64'",
+]
+# Ollama release (plan-17): Strands Decider's trainer, pinned; its prompt and head are what
+# Ollama's StrandsDeciderForDecision computes. Not in the default groups.
+strands = [
+    "strands-decider @ git+https://github.com/strands-labs/strands-decider@8550e887254485a8db4a4321b11442e351d96055",
 ]
 # Austria HVD SOAP client.
 at = [

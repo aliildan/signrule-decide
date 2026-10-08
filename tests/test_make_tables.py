@@ -43,14 +43,11 @@ def test_markdown_tables_convert_to_latex():
 def test_headline_table_has_the_key_austrian_numbers():
     md = mt.headline()
     assert md.startswith("| Austria, 400 extracts never trained on | SignRule-Decide 4B |")
-    for label in (
-        "Managing director alone",
-        "coalition questions",
-        "Minimum signers",
-        "Dangerous errors",
-        "2 % risk",
-    ):
+    for label in ("coalition questions", "Minimum signers", "Dangerous errors", "2 % risk"):
         assert label in md
+    # the easy office question is not a headline number (keyword rules also score 100 %)
+    assert "Managing director alone" not in md
+    assert "with confidence ≥ 0.9" in md
 
 
 def test_coalition_set_matches_the_ontology_used_by_the_reports():

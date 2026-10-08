@@ -122,13 +122,13 @@ def headline() -> str:
     rep = json.loads((RESULTS / "plan16" / "at-report.json").read_text())["at:gold (both batches)"]
     cm, n = coalition_mean(pq)
     rows = [
-        ["Managing director alone", pct(acc(pq, "ceo_alone"))],
         [f"Office and coalition questions (15 yes/no, {n:,} answers)", pct(cm)],
-        ["Minimum signers", pct(acc(pq, "min_signers"))],
+        [f"Minimum signers ({rep['min_signers_items']:,} extracts)", pct(acc(pq, "min_signers"))],
         ["Rule type (14 patterns)", pct(acc(pq, "rule_type"))],
         [
             'Dangerous errors ("can sign" when it cannot)',
-            f"{pct(rep['dangerous_rate'])} ({rep['dangerous']} of {rep['yes_no_items']:,})",
+            f"{pct(rep['dangerous_rate'])} ({rep['dangerous']} of {rep['yes_no_items']:,}; "
+            f"{rep['dangerous_conf_ge_0_9']} with confidence ≥ 0.9)",
         ],
         [
             "At a 2 % risk target",
