@@ -5,10 +5,10 @@
     OLLAMA_HOST=127.0.0.1:11435 ollama create signrule-decide -f runs/<name>/ollama/Modelfile
 
 What Ollama's StrandsDeciderForDecision loads (ollama mlxrunner/model/strands, create/):
-- the backbone as full weights: the base model's language-model tensors under their Hugging Face
-  names, with the LoRA merged in (W + B·A·alpha/r, in fp32, stored bf16). Names, shapes and the raw
-  norm/conv1d layout stay exactly as in the base checkpoint (Ollama detects that layout); the vision
-  tower and the MTP head are dropped;
+- the backbone as full weights: the base model's language-model tensors in the flat text-model
+  layout (`model.language_model.X` -> `model.X`), with the LoRA merged in (W + B·A·alpha/r, in fp32,
+  stored bf16). Shapes and the raw norm/conv1d layout stay exactly as in the base checkpoint (Ollama
+  detects the HF norm convention from them); the vision tower and the MTP head are dropped;
 - the pointer head in FP32 as top-level `norm.*`, `q.*`, `k.*`;
 - `config.json`: the base text config, flat, `architectures: [StrandsDeciderForDecision]`;
 - `strands_decider_config.json`: head type, pointer dim, the serving window and our per-type
@@ -49,6 +49,12 @@ def base_name(adapter_key: str) -> str:
         raise ValueError(f"unexpected adapter key {adapter_key!r}")
     path = adapter_key[len(ADAPTER_PREFIX) :].split(".lora_", 1)[0]
     return f"{BASE_PREFIX}{path}.weight"
+
+
+def out_name(name: str) -> str:
+    """The flat text-model layout every Ollama Qwen3.5 loader finds first ('model.<path>'): an
+    Ollama build on macOS did not detect the nested 'model.language_model.' container."""
+    return "model." + name[len(BASE_PREFIX) :] if name.startswith(BASE_PREFIX) else name
 
 
 def keep(name: str) -> bool:
@@ -131,7 +137,7 @@ def export(ckpt: Path, out: Path, max_length: int, temperatures: dict[str, float
                     ab = adapters[name]
                     t = merge(t, ab["A"], ab["B"], scale, t.dtype)
                     merged.add(name)
-                tensors[name] = t.contiguous()
+                tensors[out_name(name)] = t.contiguous()
         fname = f"model-{i:05d}-of-{len(shards) + 1:05d}.safetensors"
         save_file(tensors, str(out / fname), metadata={"format": "pt"})
         weight_map.update({n: fname for n in tensors})

@@ -21,6 +21,14 @@ def test_adapter_keys_map_to_base_tensor_names() -> None:
         eo.base_name("something.else.weight")
 
 
+def test_output_names_use_the_flat_text_layout() -> None:
+    assert eo.out_name("model.language_model.embed_tokens.weight") == "model.embed_tokens.weight"
+    assert eo.out_name("model.language_model.layers.0.mlp.up_proj.weight") == (
+        "model.layers.0.mlp.up_proj.weight"
+    )
+    assert eo.out_name("q.weight") == "q.weight"
+
+
 def test_kept_tensors_drop_vision_and_mtp() -> None:
     assert eo.keep("model.language_model.layers.0.mlp.up_proj.weight")
     assert eo.keep("model.language_model.embed_tokens.weight")
