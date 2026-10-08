@@ -203,8 +203,8 @@ The paper:
   year      = {2026},
   publisher = {Zenodo},
   note      = {Preprint},
-  doi       = {10.5281/zenodo.23224942},
-  url       = {https://doi.org/10.5281/zenodo.23224942}
+  doi       = {10.5281/zenodo.23224941},
+  url       = {https://doi.org/10.5281/zenodo.23224941}
 }
 ```
 

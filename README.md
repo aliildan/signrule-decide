@@ -10,12 +10,12 @@ computed on your own GPU: answering a request sends nothing anywhere.
 [![Licence: Apache-2.0](https://img.shields.io/badge/licence-Apache--2.0-blue.svg)](LICENSE)
 [![Python 3.12](https://img.shields.io/badge/python-3.12-3776AB.svg?logo=python&logoColor=white)](pyproject.toml)
 [![Model on Hugging Face](https://img.shields.io/badge/%F0%9F%A4%97%20model-signrule--decide--4b-FFD21E.svg)](https://huggingface.co/aildan/signrule-decide-4b)
-[![Paper](https://img.shields.io/badge/paper-10.5281%2Fzenodo.23224942-1682D4.svg)](https://doi.org/10.5281/zenodo.23224942)
+[![Paper](https://img.shields.io/badge/paper-10.5281%2Fzenodo.23224941-1682D4.svg)](https://doi.org/10.5281/zenodo.23224941)
 [![Software DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23224891.svg)](https://doi.org/10.5281/zenodo.23224891)
 
 [Quick start](#quick-start) · [Accuracy](#accuracy) · [How it works](#how-it-works) ·
 [Limitations](#limitations-and-responsible-use) · [Model card](model_card.md) ·
-[Paper](https://doi.org/10.5281/zenodo.23224942)
+[Paper](https://doi.org/10.5281/zenodo.23224941)
 
 </div>
 
@@ -327,8 +327,8 @@ If you use SignRule-Decide, please cite the paper:
   year      = {2026},
   publisher = {Zenodo},
   note      = {Preprint},
-  doi       = {10.5281/zenodo.23224942},
-  url       = {https://doi.org/10.5281/zenodo.23224942}
+  doi       = {10.5281/zenodo.23224941},
+  url       = {https://doi.org/10.5281/zenodo.23224941}
 }
 ```
 
