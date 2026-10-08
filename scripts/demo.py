@@ -290,7 +290,7 @@ def fmt_de(a: dict) -> str:
     return f"{CHOICE_DE.get(a['choice'], a['choice'])} ({p:.2f})".replace(".", ",")
 
 
-def run_de(url: str, markdown: str | None) -> int:
+def run_de(url: str, markdown: str | None, model: str | None = None) -> int:
     qc = load_questions()
     lines = [
         "Alle Beispiele sind von Hand geschrieben (keine Registerdaten). Zahlen in Klammern: "
@@ -301,7 +301,7 @@ def run_de(url: str, markdown: str | None) -> int:
         for title, state in EXAMPLES_DE:
             show = questions_for(state, SHOW_DE)
             questions = {q: dict(qc.questions[q]) for q in show}
-            r = client.post(f"{url}/v1/systemone", json={"state": state, "questions": questions})
+            r = client.post(f"{url}/v1/systemone", json=payload(state, questions, model))
             r.raise_for_status()
             ans = r.json()["answers"]
             lines.append(f"### {title}")
@@ -337,6 +337,12 @@ SHOW = (
 )
 
 
+def payload(state: dict, questions: dict, model: str | None) -> dict:
+    """The /v1/systemone body; Ollama needs the model name, the reference server ignores it."""
+    body = {"state": state, "questions": questions}
+    return {"model": model, **body} if model else body
+
+
 def fmt(a: dict) -> str:
     mark = "?" if a.get("abstain") else ""
     if a["type"] == "noul":
@@ -352,15 +358,16 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--url", default="http://127.0.0.1:8300")
     ap.add_argument("--lang", choices=["en", "de"], default="en")
     ap.add_argument("--markdown", help="--lang de: also write the tables to this file")
+    ap.add_argument("--model", help="model name, e.g. signrule-decide:4b-q8 for a local Ollama")
     a = ap.parse_args(argv)
     if a.lang == "de":
-        return run_de(a.url, a.markdown)
+        return run_de(a.url, a.markdown, a.model)
     qc = load_questions()
     questions = {q: {k: v for k, v in qc.questions[q].items()} for q in SHOW}
     print("(? = abstains at α = 2 %; values are calibrated probabilities)\n")
     with httpx.Client(timeout=120) as client:
         for title, state in EXAMPLES:
-            r = client.post(f"{a.url}/v1/systemone", json={"state": state, "questions": questions})
+            r = client.post(f"{a.url}/v1/systemone", json=payload(state, questions, a.model))
             r.raise_for_status()
             body = r.json()
             ans = body["answers"]

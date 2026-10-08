@@ -154,9 +154,41 @@ abstains. The API follows the System One schema (`/v1/systemone`), so existing J
 work unchanged. To see the hand-written German examples against your own server, run
 `uv run python scripts/demo.py --lang de`.
 
-> **Ollama.** Ollama (v0.35+) serves its own decision models over the same `/v1/systemone` API
-> ([list](https://ollama.com/search?c=decision)). It cannot load this checkpoint, which is in
-> Kev's format, so use the server above.
+### Or with Ollama
+
+A second model, trained on the same data and labels in the Strands Decider format, runs in
+[Ollama](https://ollama.com/aliildan/signrule-decide) 0.40 or later over the same API:
+
+```bash
+ollama pull aliildan/signrule-decide
+```
+
+```bash
+curl http://localhost:11434/v1/systemone -d '{
+  "model": "aliildan/signrule-decide",
+  "state": {
+    "jurisdiction": "AT",
+    "legal_form": "GmbH",
+    "signature_rule": "Geschäftsführer [PERSON_1]: vertritt seit 01.03.2019 gemeinsam mit einem weiteren Geschäftsführer; Geschäftsführer [PERSON_2]: vertritt seit 01.03.2019 gemeinsam mit einem weiteren Geschäftsführer",
+    "roles": [{"role": "Geschäftsführer", "count": 2}]
+  },
+  "questions": {
+    "ceo_alone": {"type": "noul", "instructions": "Can the managing director (CEO), by virtue of that office, bind the company alone?"},
+    "two_ceos": {"type": "noul", "instructions": "Can two managing directors together bind the company?"}
+  }
+}'
+```
+
+- Use the wordings from `configs/questions.yaml` and keep the state keys in the order shown
+  (`jurisdiction`, `legal_form`, `signature_rule`, `procuration_rule`, `roles`, `role_notes`):
+  the model reads the state as JSON in the order you send it.
+- Ollama returns calibrated probabilities (temperatures fitted on the Austrian validation part).
+  Abstention, name masking and the consistency check live in the reference server above.
+- **macOS:** Ollama runs it on MLX by default (not yet tested on a Mac). **Linux:** Ollama's MLX
+  engine is a separate download (`ollama-linux-amd64-mlx`, CUDA 13), and the server needs
+  `MLX_CUDA_CONV_CACHE_SIZE=8192` and `MLX_CUDA_GRAPH_CACHE_SIZE=8192` in its environment. Tested
+  on Linux with an RTX 5090.
+- Its accuracy and how closely Ollama reproduces it: [The Ollama model](#the-ollama-model).
 
 ## Accuracy
 
@@ -222,6 +254,29 @@ questions, a fine-tuned encoder is a valid, cheaper choice.
 <!-- /table -->
 
 </details>
+
+### The Ollama model
+
+The Ollama model (Strands Decider format, `Qwen/Qwen3.5-4B-Base`, one epoch on the same training
+data and labels) on the same reference sets:
+
+<!-- table:ollama -->
+| Reference sets | Reference server (Kev) | Ollama model (Strands Decider) |
+|---|---|---|
+| Austria: office and coalition questions | 99.3 % | 99.5 % |
+| Austria: minimum signers | 97.7 % | 96.9 % |
+| Austria: rule type | 94.6 % | 94.3 % |
+| Austria: dangerous errors ("can sign" when it cannot) | 12 of 2,178 | 6 of 2,178 |
+| Norway (beyond the interpreter): rule type | 93.0 % | 95.5 % |
+| Denmark (never trained on): coalitions | 92.5 % | 93.2 % |
+
+The Ollama model's numbers are measured on its PyTorch weights. Served by Ollama (q8), it gives the same decision on 99.9 % of the 4,308 Austrian answers, mean probability difference 0.0005, largest 0.10 (on answers the model itself was unsure about).
+<!-- /table -->
+
+Its release deviates from the pre-registered plan: the plan allowed publication only if every
+probability served by Ollama matched the PyTorch model within 0.02. The largest difference was
+0.10, on answers the model itself was unsure about, and the project owner decided to publish the
+q8 build anyway. Details in the [model card](model_card.md).
 
 ### Evaluation data
 

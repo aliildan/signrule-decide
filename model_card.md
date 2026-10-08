@@ -33,9 +33,12 @@ The base model `Qwen/Qwen3.5-4B-Base` is downloaded on first start. Files: `adap
 (LoRA), `head.pt` (pointer head, PyTorch state), `calibration/NO.json` and `calibration/AT.json`
 (temperatures and abstention thresholds fitted on each register's validation part), tokenizer and
 training configuration. Request format and examples: the GitHub README and `results/demo/demo-de.md`.
-Ollama (v0.35+) serves its own decision models over the same `/v1/systemone` API
-(https://ollama.com/search?c=decision); it cannot load this checkpoint, which is in Kev's format.
-Use the reference server.
+
+**Ollama:** this checkpoint (Kev format) does not load in Ollama. A second model, trained on the
+same data and labels in the Strands Decider format, is on Ollama as
+[`aliildan/signrule-decide`](https://ollama.com/aliildan/signrule-decide) (q8, 5.1 GB; `ollama
+pull aliildan/signrule-decide`). It returns calibrated probabilities without abstention, name
+masking or the consistency check; see [The Ollama model](#the-ollama-model).
 
 ## Model details
 
@@ -155,6 +158,31 @@ several registers with one question set.
 
 Benchmarks encode every request as the server does (states up to 64k tokens). An earlier benchmark
 setting skipped Austrian states over 384 tokens; all numbers above include them.
+
+### The Ollama model
+
+Strands Decider format (strands-decider's trainer, `Qwen/Qwen3.5-4B-Base`, LoRA r16, pointer head,
+one epoch on the same training data and labels), calibrated with temperatures fitted on the
+Austrian validation part:
+
+<!-- table:ollama -->
+| Reference sets | Reference server (Kev) | Ollama model (Strands Decider) |
+|---|---|---|
+| Austria: office and coalition questions | 99.3 % | 99.5 % |
+| Austria: minimum signers | 97.7 % | 96.9 % |
+| Austria: rule type | 94.6 % | 94.3 % |
+| Austria: dangerous errors ("can sign" when it cannot) | 12 of 2,178 | 6 of 2,178 |
+| Norway (beyond the interpreter): rule type | 93.0 % | 95.5 % |
+| Denmark (never trained on): coalitions | 92.5 % | 93.2 % |
+
+The Ollama model's numbers are measured on its PyTorch weights. Served by Ollama (q8), it gives the same decision on 99.9 % of the 4,308 Austrian answers, mean probability difference 0.0005, largest 0.10 (on answers the model itself was unsure about).
+<!-- /table -->
+
+**Deviation from the pre-registration:** publication required every probability served by Ollama
+to match the PyTorch model within 0.02 (H23). The argmax and mean bounds held, the largest
+difference (0.10, q8) did not; the project owner decided to publish the q8 build anyway. On Linux,
+Ollama's MLX engine needs `MLX_CUDA_CONV_CACHE_SIZE` and `MLX_CUDA_GRAPH_CACHE_SIZE` raised; the
+bf16 build ran out of GPU memory on long Austrian extracts there, q8 did not.
 
 ## Limitations and risks
 

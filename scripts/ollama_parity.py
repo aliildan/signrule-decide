@@ -15,7 +15,9 @@ from __future__ import annotations
 import argparse
 import importlib.util
 import json
+import subprocess
 import sys
+import tempfile
 from pathlib import Path
 from typing import Any
 from urllib.parse import urlparse
@@ -75,13 +77,11 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--states", choices=["demo", "gold"], default="demo")
     ap.add_argument("--jurisdiction", default="at")
     ap.add_argument("--out", type=Path)
+    ap.add_argument("--torch-only", type=Path, help=argparse.SUPPRESS)  # child: write answers here
     a = ap.parse_args(argv)
     base = a.host if "://" in a.host else f"http://{a.host}"
     if urlparse(base).hostname not in LOCAL_HOSTS:
         raise SystemExit("parity runs against a local Ollama only")
-
-    from strands_decider.infer import load_engine
-    from strands_decider.schema import SystemOneRequest
 
     qc = load_questions().questions
     if a.states == "demo":
@@ -94,33 +94,57 @@ def main(argv: list[str] | None = None) -> int:
             for r in load_requests(a.jurisdiction, "gold", "test")
         ]
 
-    # one model on the GPU at a time: the PyTorch pass first, then free it for Ollama's MLX engine
-    import torch
+    if a.torch_only:
+        from strands_decider.infer import load_engine
+        from strands_decider.schema import SystemOneRequest
 
-    engine = load_engine(a.ckpt, device="cuda")
-    torch_answers = [
-        engine.evaluate(
-            SystemOneRequest(state=state, questions=ask_payload(qc, qids))
-        ).model_dump()["answers"]
-        for state, qids in items
-    ]
-    del engine
-    torch.cuda.empty_cache()
+        engine = load_engine(a.ckpt, device="cuda")
+        answers = [
+            engine.evaluate(
+                SystemOneRequest(state=state, questions=ask_payload(qc, qids))
+            ).model_dump()["answers"]
+            for state, qids in items
+        ]
+        a.torch_only.write_text(json.dumps(answers))
+        return 0
+
+    # One model on the GPU at a time: unload it from Ollama (its MLX pool holds memory while
+    # loaded), compute the PyTorch answers in a child process (all its GPU memory is returned when
+    # it exits), then query Ollama.
+    for m in httpx.get(f"{base}/api/ps", timeout=30).json().get("models", []):
+        httpx.post(f"{base}/api/generate", json={"model": m["name"], "keep_alive": 0}, timeout=120)
+    with tempfile.TemporaryDirectory() as tmp:
+        cache = Path(tmp) / "torch.json"
+        child = [sys.executable, __file__, "--ckpt", a.ckpt, "--model", a.model]
+        child += ["--host", a.host, "--states", a.states, "--jurisdiction", a.jurisdiction]
+        child += ["--torch-only", str(cache)]
+        subprocess.run(child, check=True)
+        torch_answers = json.loads(cache.read_text())
 
     pairs: list[tuple[bool, float]] = []
     by_kind: dict[str, list[tuple[bool, float]]] = {}
+    worst: list[tuple[float, str, float, float]] = []
+    restarts = failed = 0
     with httpx.Client(timeout=600) as client:
         for (state, qids), torch_ans in zip(items, torch_answers, strict=True):
-            r = client.post(
-                f"{base}/v1/systemone",
-                json={"model": a.model, "state": state, "questions": ask_payload(qc, qids)},
-            )
-            r.raise_for_status()
+            body = {"model": a.model, "state": state, "questions": ask_payload(qc, qids)}
+            r = client.post(f"{base}/v1/systemone", json=body)
+            if r.status_code == 500:
+                # Linux MLX/CUDA runner out of memory: unload, reload, retry once (counted)
+                restarts += 1
+                client.post(f"{base}/api/generate", json={"model": a.model, "keep_alive": 0})
+                r = client.post(f"{base}/v1/systemone", json=body)
+            if r.status_code != 200:
+                failed += 1
+                pairs += [(False, 1.0)] * len(qids)  # unserved answers count against parity
+                continue
             ollama_ans = r.json()["answers"]
             for q in qids:
-                pair = compare(probs_of(torch_ans[q]), probs_of(ollama_ans[q]))
+                tp, op = probs_of(torch_ans[q]), probs_of(ollama_ans[q])
+                pair = compare(tp, op)
                 pairs.append(pair)
                 by_kind.setdefault(qc[q]["type"], []).append(pair)
+                worst.append((pair[1], q, round(max(tp.values()), 4), round(max(op.values()), 4)))
     report = {
         "model": a.model,
         "ckpt": a.ckpt,
@@ -128,6 +152,14 @@ def main(argv: list[str] | None = None) -> int:
         "requests": len(items),
         **summarise(pairs),
         "by_kind": {k: summarise(v) for k, v in sorted(by_kind.items())},
+        # the largest differences: question, PyTorch and Ollama top-option probability
+        "largest": [
+            {"abs_dp": round(d, 4), "qid": q, "torch_top": t, "ollama_top": o}
+            for d, q, t, o in sorted(worst, reverse=True)[:8]
+        ],
+        "abs_dp_over_0.01": sum(d > 0.01 for d, *_ in worst),
+        "runner_restarts": restarts,
+        "failed_requests": failed,
     }
     print(json.dumps(report, indent=1))
     if a.out:

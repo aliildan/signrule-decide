@@ -326,6 +326,48 @@ def latex_note(md: str) -> str:
     return " ".join(_tex(x) for x in rest)
 
 
+def ollama() -> str:
+    """The Ollama variant (Strands Decider format, plan-17) next to the release model."""
+    r = json.loads((RESULTS / "plan17" / "strands-report.json").read_text())
+    par = r["parity"]["at-gold-q8"]
+    s_at, c_at = r["at:gold"], r["reference_at:gold"]
+    s_no, c_no, s_dk = r["no:gold"], r["reference_no:gold"], r["dk:gold"]
+    c_dk = load("at+no-random-to-dk-gold", RELEASE)["per_question"]
+    rows = [
+        [
+            "Austria: office and coalition questions",
+            pct(c_at["coalition_mean"]),
+            pct(s_at["coalition_mean"]),
+        ],
+        ["Austria: minimum signers", pct(c_at["min_signers"]), pct(s_at["min_signers"])],
+        ["Austria: rule type", pct(c_at["rule_type"]), pct(s_at["rule_type"])],
+        [
+            'Austria: dangerous errors ("can sign" when it cannot)',
+            f"{c_at['dangerous']} of {c_at['yes_no_items']:,}",
+            f"{s_at['dangerous']} of {s_at['yes_no_items']:,}",
+        ],
+        [
+            "Norway (beyond the interpreter): rule type",
+            pct(c_no["rule_type"]),
+            pct(s_no["rule_type"]),
+        ],
+        [
+            "Denmark (never trained on): coalitions",
+            pct(coalition_mean(c_dk)[0]),
+            pct(s_dk["coalition_mean"]),
+        ],
+    ]
+    note = (
+        "\n\nThe Ollama model's numbers are measured on its PyTorch weights. Served by Ollama "
+        f"(q8), it gives the same decision on {pct(par['argmax_agreement'])} of the "
+        f"{par['answers']:,} Austrian answers, mean probability "
+        f"difference {par['mean_abs_dp']:.4f}, largest {par['max_abs_dp']:.2f} (on answers "
+        "the model itself was unsure about)."
+    )
+    head = ["Reference sets", "Reference server (Kev)", "Ollama model (Strands Decider)"]
+    return table(head, rows) + note
+
+
 TABLES = {
     "headline": headline,
     "at-gold": at_gold,
@@ -335,6 +377,7 @@ TABLES = {
     "compute": compute,
     "data": data,
     "prereg": prereg,
+    "ollama": ollama,
 }
 BLOCK = re.compile(r"(<!-- table:([\w-]+) -->\n)(.*?)(<!-- /table -->)", re.S)
 

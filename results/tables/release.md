@@ -85,3 +85,16 @@ Companies read: Norway with 1,274,984 API responses (signing and procuration); A
 | H18 | Strictest merged policy keeps risk <= 5 % at alpha 5 % on Denmark | **not met** | risk 14.3 % |
 | H21 | Boards and partnerships: coalitions >= 95 %, min signers >= 90 %, dangerous yes/no errors <= 1 % | **met** | 99.4 % / 98.5 % / 0.55 % |
 | H22 | Risk <= 2 % at alpha 2 % on answered structural questions | **met** | 1.3 % at 99.9 % coverage |
+
+## ollama
+
+| Reference sets | Reference server (Kev) | Ollama model (Strands Decider) |
+|---|---|---|
+| Austria: office and coalition questions | 99.3 % | 99.5 % |
+| Austria: minimum signers | 97.7 % | 96.9 % |
+| Austria: rule type | 94.6 % | 94.3 % |
+| Austria: dangerous errors ("can sign" when it cannot) | 12 of 2,178 | 6 of 2,178 |
+| Norway (beyond the interpreter): rule type | 93.0 % | 95.5 % |
+| Denmark (never trained on): coalitions | 92.5 % | 93.2 % |
+
+The Ollama model's numbers are measured on its PyTorch weights. Served by Ollama (q8), it gives the same decision on 99.9 % of the 4,308 Austrian answers, mean probability difference 0.0005, largest 0.10 (on answers the model itself was unsure about).

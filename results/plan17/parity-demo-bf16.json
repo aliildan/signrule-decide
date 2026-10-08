@@ -1,0 +1,30 @@
+{
+ "model": "strands-4b-v1-raw",
+ "ckpt": "runs/strands-4b-v1/ckpt",
+ "states": "demo",
+ "requests": 9,
+ "answers": 189,
+ "argmax_agreement": 1.0,
+ "max_abs_dp": 0.023377550726029678,
+ "mean_abs_dp": 0.000338212158300883,
+ "by_kind": {
+  "choice": {
+   "answers": 18,
+   "argmax_agreement": 1.0,
+   "max_abs_dp": 1.739849012616368e-05,
+   "mean_abs_dp": 1.7662884930584787e-06
+  },
+  "noul": {
+   "answers": 162,
+   "argmax_agreement": 1.0,
+   "max_abs_dp": 0.0034067848600738415,
+   "mean_abs_dp": 2.1721677614639053e-05
+  },
+  "score": {
+   "answers": 9,
+   "argmax_agreement": 1.0,
+   "max_abs_dp": 0.023377550726029678,
+   "mean_abs_dp": 0.006707932550268923
+  }
+ }
+}
