@@ -10,10 +10,11 @@ computed on your own GPU: answering a request sends nothing anywhere.
 [![Licence: Apache-2.0](https://img.shields.io/badge/licence-Apache--2.0-blue.svg)](LICENSE)
 [![Python 3.12](https://img.shields.io/badge/python-3.12-3776AB.svg?logo=python&logoColor=white)](pyproject.toml)
 [![Model on Hugging Face](https://img.shields.io/badge/%F0%9F%A4%97%20model-signrule--decide--4b-FFD21E.svg)](https://huggingface.co/aildan/signrule-decide-4b)
+[![Ollama](https://img.shields.io/badge/ollama-aliildan%2Fsignrule--decide-000000.svg?logo=ollama&logoColor=white)](https://ollama.com/aliildan/signrule-decide)
 [![Paper](https://img.shields.io/badge/paper-10.5281%2Fzenodo.23224941-1682D4.svg)](https://doi.org/10.5281/zenodo.23224941)
 [![Software DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23224891.svg)](https://doi.org/10.5281/zenodo.23224891)
 
-[Quick start](#quick-start) · [Accuracy](#accuracy) · [How it works](#how-it-works) ·
+[Quick start](#quick-start) · [Ollama](#or-with-ollama) · [Accuracy](#accuracy) · [How it works](#how-it-works) ·
 [Limitations](#limitations-and-responsible-use) · [Model card](model_card.md) ·
 [Paper](https://doi.org/10.5281/zenodo.23224941)
 
@@ -184,7 +185,7 @@ curl http://localhost:11434/v1/systemone -d '{
   the model reads the state as JSON in the order you send it.
 - Ollama returns calibrated probabilities (temperatures fitted on the Austrian validation part).
   Abstention, name masking and the consistency check live in the reference server above.
-- **macOS:** Ollama runs it on MLX by default (not yet tested on a Mac). **Linux:** Ollama's MLX
+- **macOS:** Ollama runs it on MLX by default (tested on an Apple M1 MacBook Pro). **Linux:** Ollama's MLX
   engine is a separate download (`ollama-linux-amd64-mlx`, CUDA 13), and the server needs
   `MLX_CUDA_CONV_CACHE_SIZE=8192` and `MLX_CUDA_GRAPH_CACHE_SIZE=8192` in its environment. Tested
   on Linux with an RTX 5090.
